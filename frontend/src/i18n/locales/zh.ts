@@ -523,6 +523,27 @@ export default {
     addBalanceWithCode: '使用兑换码充值'
   },
 
+  // Security Dashboard
+  security: {
+    dashboard: '安全态势',
+    dashboardDesc: '零影AI网关实时安全监控',
+    aiTraffic: 'AI 流量',
+    blockedThreats: '威胁拦截',
+    activePolicies: '运行策略',
+    activeModels: '活跃模型',
+    totalRequests: '总请求量',
+    dataLeakagePrevented: '数据泄露阻止',
+    shadowAIDetected: 'Shadow AI 检测',
+    costSavings: '成本节约',
+    riskEvents: '风险事件',
+    threatActivity: '威胁活动',
+    chartPlaceholder: '图表加载中...',
+    recentAlerts: '最近告警',
+    noAlerts: '暂无告警',
+    policyOverview: '策略概览',
+    modelDistribution: '模型分布'
+  },
+
   // Groups (shared)
   groups: {
     subscription: '订阅'

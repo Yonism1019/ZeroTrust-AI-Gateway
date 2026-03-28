@@ -120,13 +120,13 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/dashboard',
     name: 'Dashboard',
-    component: () => import('@/views/user/DashboardView.vue'),
+    component: () => import('@/views/user/SecurityDashboardView.vue'),
     meta: {
       requiresAuth: true,
       requiresAdmin: false,
-      title: 'Dashboard',
-      titleKey: 'dashboard.title',
-      descriptionKey: 'dashboard.welcomeMessage'
+      title: '零影AI 安全态势',
+      titleKey: 'security.dashboard',
+      descriptionKey: 'security.dashboardDesc'
     }
   },
   {
@@ -458,8 +458,8 @@ router.beforeEach((to, _from, next) => {
         next()
         return
       }
-      // Admin users go to admin dashboard, regular users go to user dashboard
-      next(authStore.isAdmin ? '/admin/dashboard' : '/dashboard')
+      // Admin users go to user dashboard (ZeroTrust AI Gateway), regular users go to user dashboard
+      next('/dashboard')
       return
     }
     // Backend mode: block public pages for unauthenticated users (except login, key-usage, setup)

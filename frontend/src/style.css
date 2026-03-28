@@ -4,18 +4,25 @@
 
 @layer base {
   * {
-    @apply border-gray-200 dark:border-dark-700;
+    @apply border-space-border;
   }
 
   html {
     @apply scroll-smooth antialiased;
   }
 
+  /* ========== 零影AI 深空主题 ========== */
   body {
-    @apply bg-gray-50 text-gray-900 dark:bg-dark-950 dark:text-gray-100;
+    @apply bg-deep-space text-white;
     @apply min-h-screen;
   }
 
+  /* 选中文本样式 - 电光青主题色 */
+  ::selection {
+    @apply bg-electric-cyan/30 text-white;
+  }
+
+  /* ========== 滚动条样式 ========== */
   /* 自定义滚动条 - 默认隐藏，悬停或滚动时显示 */
   * {
     scrollbar-width: thin;
@@ -24,12 +31,12 @@
 
   *:hover,
   *:focus-within {
-    scrollbar-color: rgba(156, 163, 175, 0.5) transparent;
+    scrollbar-color: rgba(0, 212, 255, 0.3) transparent;
   }
 
   .dark *:hover,
   .dark *:focus-within {
-    scrollbar-color: rgba(75, 85, 99, 0.5) transparent;
+    scrollbar-color: rgba(0, 212, 255, 0.3) transparent;
   }
 
   ::-webkit-scrollbar {
@@ -46,16 +53,11 @@
   }
 
   *:hover::-webkit-scrollbar-thumb {
-    @apply bg-gray-300/50 dark:bg-dark-600/50;
+    @apply bg-electric-cyan/30;
   }
 
   *:hover::-webkit-scrollbar-thumb:hover {
-    @apply bg-gray-400 dark:bg-dark-500;
-  }
-
-  /* 选中文本样式 */
-  ::selection {
-    @apply bg-primary-500/20 text-primary-900 dark:text-primary-100;
+    @apply bg-electric-cyan/50;
   }
 
   /*
@@ -91,54 +93,49 @@
 }
 
 @layer components {
-  /* ============ 按钮样式 ============ */
+  /* ============ 零影AI 按钮样式 ============ */
   .btn {
     @apply inline-flex items-center justify-center gap-2;
     @apply rounded-xl px-4 py-2.5 text-sm font-medium;
     @apply transition-all duration-200 ease-out;
-    @apply focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:ring-offset-2;
+    @apply focus:outline-none focus:ring-2 focus:ring-electric-cyan/50 focus:ring-offset-2 focus:ring-offset-deep-space;
     @apply disabled:transform-none disabled:cursor-not-allowed disabled:opacity-50;
     @apply active:scale-[0.98];
   }
 
   .btn-primary {
-    @apply bg-gradient-to-r from-primary-500 to-primary-600;
-    @apply text-white shadow-md shadow-primary-500/25;
-    @apply hover:from-primary-600 hover:to-primary-700 hover:shadow-lg hover:shadow-primary-500/30;
-    @apply dark:shadow-primary-500/20;
+    @apply bg-gradient-to-r from-electric-cyan to-electric-cyan/80;
+    @apply text-deep-space font-semibold shadow-lg shadow-electric-cyan/30;
+    @apply hover:from-electric-cyan hover:shadow-electric-cyan/50 hover:shadow-glow-cyan;
   }
 
   .btn-secondary {
-    @apply bg-white dark:bg-dark-800;
-    @apply text-gray-700 dark:text-gray-200;
-    @apply border border-gray-200 dark:border-dark-600;
-    @apply shadow-sm hover:bg-gray-50 dark:hover:bg-dark-700;
-    @apply hover:border-gray-300 dark:hover:border-dark-500;
+    @apply bg-space-card text-white;
+    @apply border border-space-border;
+    @apply hover:bg-space-dark hover:border-electric-cyan/50;
   }
 
   .btn-ghost {
-    @apply bg-transparent text-gray-600 dark:text-gray-300;
-    @apply hover:bg-gray-100 dark:hover:bg-dark-800;
+    @apply bg-transparent text-white/70;
+    @apply hover:bg-space-card hover:text-electric-cyan;
   }
 
   .btn-danger {
-    @apply bg-gradient-to-r from-red-500 to-red-600;
-    @apply text-white shadow-md shadow-red-500/25;
-    @apply hover:from-red-600 hover:to-red-700 hover:shadow-lg hover:shadow-red-500/30;
+    @apply bg-gradient-to-r from-danger-red to-danger-red/80;
+    @apply text-white shadow-lg shadow-danger-red/30;
+    @apply hover:shadow-danger-red/50 hover:shadow-glow-red;
   }
 
   .btn-success {
-    @apply bg-gradient-to-r from-emerald-500 to-emerald-600;
-    @apply text-white shadow-md shadow-emerald-500/25;
-    @apply hover:from-emerald-600 hover:to-emerald-700 hover:shadow-lg hover:shadow-emerald-500/30;
-    @apply dark:shadow-emerald-500/20;
+    @apply bg-gradient-to-r from-safe-green to-safe-green/80;
+    @apply text-deep-space font-semibold shadow-lg shadow-safe-green/30;
+    @apply hover:shadow-safe-green/50 hover:shadow-glow-green;
   }
 
   .btn-warning {
-    @apply bg-gradient-to-r from-amber-500 to-amber-600;
-    @apply text-white shadow-md shadow-amber-500/25;
-    @apply hover:from-amber-600 hover:to-amber-700 hover:shadow-lg hover:shadow-amber-500/30;
-    @apply dark:shadow-amber-500/20;
+    @apply bg-gradient-to-r from-warning-amber to-warning-amber/80;
+    @apply text-deep-space font-semibold shadow-lg shadow-warning-amber/30;
+    @apply hover:shadow-warning-amber/50 hover:shadow-glow-amber;
   }
 
   .btn-sm {
@@ -157,32 +154,31 @@
     @apply rounded-xl p-2.5;
   }
 
-  /* ============ 输入框样式 ============ */
+  /* ============ 零影AI 输入框样式 ============ */
   .input {
     @apply w-full rounded-xl px-4 py-2.5 text-sm;
-    @apply bg-white dark:bg-dark-800;
-    @apply border border-gray-200 dark:border-dark-600;
-    @apply text-gray-900 dark:text-gray-100;
-    @apply placeholder:text-gray-400 dark:placeholder:text-dark-400;
+    @apply bg-space-card text-white;
+    @apply border border-space-border;
+    @apply placeholder:text-white/40;
     @apply transition-all duration-200;
-    @apply focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/30;
-    @apply disabled:cursor-not-allowed disabled:bg-gray-100 dark:disabled:bg-dark-900;
+    @apply focus:border-electric-cyan focus:outline-none focus:ring-2 focus:ring-electric-cyan/30 focus:shadow-glow-cyan;
+    @apply disabled:cursor-not-allowed disabled:bg-space-dark disabled:opacity-50;
   }
 
   .input-error {
-    @apply border-red-500 focus:border-red-500 focus:ring-red-500/30;
+    @apply border-danger-red focus:border-danger-red focus:ring-danger-red/30;
   }
 
   .input-label {
-    @apply mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-300;
+    @apply mb-1.5 block text-sm font-medium text-white/80;
   }
 
   .input-hint {
-    @apply mt-1 text-xs text-gray-500 dark:text-dark-400;
+    @apply mt-1 text-xs text-white/50;
   }
 
   .input-error-text {
-    @apply mt-1 text-xs text-red-500;
+    @apply mt-1 text-xs text-danger-red;
   }
 
   /* Hide number input spinner buttons for cleaner UI */
@@ -198,41 +194,39 @@
 
   /* ============ 玻璃效果 ============ */
   .glass {
-    @apply bg-white/80 backdrop-blur-xl dark:bg-dark-800/80;
+    @apply bg-space-card/80 backdrop-blur-xl;
+    @apply border border-space-border;
   }
 
   .glass-card {
-    @apply bg-white/70 dark:bg-dark-800/70;
-    @apply backdrop-blur-xl;
+    @apply bg-space-card/70 backdrop-blur-xl;
     @apply rounded-2xl;
-    @apply border border-white/20 dark:border-dark-700/50;
-    @apply shadow-glass;
+    @apply border border-space-border;
+    @apply shadow-glow-cyan;
     @apply transition-all duration-300;
   }
 
-  /* ============ 卡片样式 ============ */
+  /* ============ 零影AI 卡片样式 ============ */
   .card {
-    @apply bg-white dark:bg-dark-800/50;
+    @apply bg-space-card;
     @apply rounded-2xl;
-    @apply border border-gray-100 dark:border-dark-700/50;
+    @apply border border-space-border;
     @apply shadow-card;
     @apply transition-all duration-300;
   }
 
   .card-hover {
-    @apply hover:-translate-y-0.5 hover:shadow-card-hover;
-    @apply hover:border-gray-200 dark:hover:border-dark-600;
+    @apply hover:-translate-y-0.5 hover:shadow-glow-cyan hover:border-electric-cyan/30;
   }
 
   .card-glass {
-    @apply bg-white/70 dark:bg-dark-800/70;
-    @apply backdrop-blur-xl;
-    @apply border border-white/20 dark:border-dark-700/50;
-    @apply shadow-glass;
+    @apply bg-space-card/70 backdrop-blur-xl;
+    @apply border border-space-border;
+    @apply shadow-glow-cyan;
   }
 
   .card-header {
-    @apply border-b border-gray-100 dark:border-dark-700;
+    @apply border-b border-space-border;
     @apply px-6 py-4;
   }
 
@@ -241,11 +235,11 @@
   }
 
   .card-footer {
-    @apply border-t border-gray-100 dark:border-dark-700;
+    @apply border-t border-space-border;
     @apply px-6 py-4;
   }
 
-  /* ============ 统计卡片 ============ */
+  /* ============ 零影AI 统计卡片 ============ */
   .stat-card {
     @apply card p-5;
     @apply flex items-start gap-4;
@@ -258,27 +252,27 @@
   }
 
   .stat-icon-primary {
-    @apply bg-primary-100 text-primary-600 dark:bg-primary-900/30 dark:text-primary-400;
+    @apply bg-electric-cyan/20 text-electric-cyan;
   }
 
   .stat-icon-success {
-    @apply bg-emerald-100 text-emerald-600 dark:bg-emerald-900/30 dark:text-emerald-400;
+    @apply bg-safe-green/20 text-safe-green;
   }
 
   .stat-icon-warning {
-    @apply bg-amber-100 text-amber-600 dark:bg-amber-900/30 dark:text-amber-400;
+    @apply bg-warning-amber/20 text-warning-amber;
   }
 
   .stat-icon-danger {
-    @apply bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400;
+    @apply bg-danger-red/20 text-danger-red;
   }
 
   .stat-value {
-    @apply text-2xl font-bold text-gray-900 dark:text-white truncate;
+    @apply text-2xl font-bold text-white truncate;
   }
 
   .stat-label {
-    @apply text-sm text-gray-500 dark:text-dark-400;
+    @apply text-sm text-white/60;
   }
 
   .stat-trend {
@@ -286,16 +280,17 @@
   }
 
   .stat-trend-up {
-    @apply text-emerald-600 dark:text-emerald-400;
+    @apply text-safe-green;
   }
 
   .stat-trend-down {
-    @apply text-red-600 dark:text-red-400;
+    @apply text-danger-red;
   }
 
   /* ============ 表格样式 ============ */
   .table-container {
-    @apply overflow-x-auto rounded-xl border border-gray-200 dark:border-dark-700;
+    @apply overflow-x-auto rounded-xl border border-space-border;
+    @apply bg-space-card;
   }
 
   .table {
@@ -304,15 +299,15 @@
 
   .table th {
     @apply px-4 py-3 text-left font-medium;
-    @apply text-gray-600 dark:text-dark-300;
-    @apply bg-gray-50 dark:bg-dark-800/50;
-    @apply border-b border-gray-200 dark:border-dark-700;
+    @apply text-white/60;
+    @apply bg-deep-space/50;
+    @apply border-b border-space-border;
   }
 
   .table td {
     @apply px-4 py-3;
-    @apply text-gray-700 dark:text-gray-300;
-    @apply border-b border-gray-100 dark:border-dark-800;
+    @apply text-white/80;
+    @apply border-b border-space-border/50;
   }
 
   .table tr:last-child td {
@@ -321,7 +316,7 @@
 
   .table tbody tr {
     @apply transition-colors duration-150;
-    @apply hover:bg-gray-50 dark:hover:bg-dark-800/30;
+    @apply hover:bg-electric-cyan/5;
   }
 
   /* ============ 徽章样式 ============ */
@@ -331,44 +326,44 @@
   }
 
   .badge-primary {
-    @apply bg-primary-100 text-primary-700 dark:bg-primary-900/30 dark:text-primary-400;
+    @apply bg-electric-cyan/20 text-electric-cyan;
   }
 
   .badge-success {
-    @apply bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400;
+    @apply bg-safe-green/20 text-safe-green;
   }
 
   .badge-warning {
-    @apply bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400;
+    @apply bg-warning-amber/20 text-warning-amber;
   }
 
   .badge-danger {
-    @apply bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400;
+    @apply bg-danger-red/20 text-danger-red;
   }
 
   .badge-gray {
-    @apply bg-gray-100 text-gray-700 dark:bg-dark-700 dark:text-dark-300;
+    @apply bg-white/10 text-white/60;
   }
 
   .badge-purple {
-    @apply bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400;
+    @apply bg-neon-purple/20 text-neon-purple;
   }
 
   /* ============ 下拉菜单 ============ */
   .dropdown {
     @apply absolute z-50;
-    @apply bg-white dark:bg-dark-800;
+    @apply bg-space-card;
     @apply rounded-xl;
-    @apply border border-gray-200 dark:border-dark-700;
-    @apply shadow-lg;
+    @apply border border-space-border;
+    @apply shadow-lg shadow-black/20;
     @apply py-1;
     @apply origin-top-right animate-scale-in;
   }
 
   .dropdown-item {
     @apply px-4 py-2 text-sm;
-    @apply text-gray-700 dark:text-gray-300;
-    @apply hover:bg-gray-100 dark:hover:bg-dark-700;
+    @apply text-white/80;
+    @apply hover:bg-electric-cyan/10 hover:text-electric-cyan;
     @apply cursor-pointer transition-colors;
     @apply flex items-center gap-2;
   }
@@ -376,28 +371,28 @@
   /* ============ 模态框 ============ */
   .modal-overlay {
     @apply fixed inset-0 z-50;
-    @apply bg-black/50 backdrop-blur-sm;
+    @apply bg-black/60 backdrop-blur-sm;
     @apply flex items-center justify-center p-2 sm:p-4;
   }
 
   .modal-content {
     @apply w-full;
     @apply max-h-[95vh] sm:max-h-[90vh];
-    @apply bg-white dark:bg-dark-800;
+    @apply bg-space-card;
     @apply rounded-2xl shadow-2xl;
-    @apply border border-gray-200 dark:border-dark-700;
+    @apply border border-space-border;
     @apply flex flex-col;
   }
 
   .modal-header {
-    @apply border-b border-gray-200 px-4 py-3 dark:border-dark-700;
+    @apply border-b border-space-border px-4 py-3;
     @apply sm:px-6 sm:py-4;
     @apply flex items-center justify-between;
     @apply flex-shrink-0;
   }
 
   .modal-title {
-    @apply text-lg font-semibold text-gray-900 dark:text-white;
+    @apply text-lg font-semibold text-white;
   }
 
   .modal-body {
@@ -407,7 +402,7 @@
   }
 
   .modal-footer {
-    @apply border-t border-gray-200 px-4 py-3 dark:border-dark-700;
+    @apply border-t border-space-border px-4 py-3;
     @apply sm:px-6 sm:py-4;
     @apply flex items-center justify-end gap-3;
     @apply flex-shrink-0;
@@ -469,19 +464,20 @@
   /* ============ Dialog ============ */
   .dialog-overlay {
     @apply fixed inset-0 z-50;
-    @apply bg-black/40 dark:bg-black/60;
+    @apply bg-black/60 backdrop-blur-sm;
     @apply flex items-center justify-center p-4;
   }
 
   .dialog-container {
     @apply flex w-full flex-col;
     @apply max-h-[90vh];
-    @apply rounded-2xl bg-white dark:bg-dark-800;
-    @apply shadow-xl;
+    @apply rounded-2xl bg-space-card;
+    @apply border border-space-border;
+    @apply shadow-xl shadow-black/30;
   }
 
   .dialog-header {
-    @apply border-b border-gray-100 px-6 py-4 dark:border-dark-700;
+    @apply border-b border-space-border px-6 py-4;
     @apply flex items-center justify-between;
   }
 
@@ -490,8 +486,8 @@
   }
 
   .dialog-footer {
-    @apply border-t border-gray-100 px-6 py-4 dark:border-dark-700;
-    @apply bg-gray-50/60 dark:bg-dark-900/40;
+    @apply border-t border-space-border px-6 py-4;
+    @apply bg-deep-space/50;
     @apply flex items-center justify-end gap-3;
   }
 
@@ -499,34 +495,34 @@
   .toast {
     @apply fixed right-4 top-4 z-[100];
     @apply min-w-[320px] max-w-md;
-    @apply bg-white dark:bg-dark-800;
-    @apply rounded-xl shadow-lg;
+    @apply bg-space-card;
+    @apply rounded-xl shadow-lg shadow-black/30;
     @apply border-l-4;
     @apply p-4;
     @apply animate-slide-in-right;
   }
 
   .toast-success {
-    @apply border-l-emerald-500;
+    @apply border-l-safe-green;
   }
 
   .toast-error {
-    @apply border-l-red-500;
+    @apply border-l-danger-red;
   }
 
   .toast-warning {
-    @apply border-l-amber-500;
+    @apply border-l-warning-amber;
   }
 
   .toast-info {
-    @apply border-l-primary-500;
+    @apply border-l-electric-cyan;
   }
 
   /* ============ 侧边栏 ============ */
   .sidebar {
     @apply fixed inset-y-0 left-0 z-40;
-    @apply w-64 bg-white dark:bg-dark-900;
-    @apply border-r border-gray-200 dark:border-dark-800;
+    @apply w-64 bg-deep-space;
+    @apply border-r border-space-border;
     @apply flex flex-col;
     @apply transition-transform duration-300;
   }
@@ -534,7 +530,7 @@
   .sidebar-header {
     @apply h-16 px-6;
     @apply flex items-center gap-3;
-    @apply border-b border-gray-100 dark:border-dark-800;
+    @apply border-b border-space-border;
   }
 
   .sidebar-nav {
@@ -544,16 +540,15 @@
   .sidebar-link {
     @apply flex items-center gap-3 rounded-xl px-3 py-2.5;
     @apply text-sm font-medium;
-    @apply text-gray-600 dark:text-dark-300;
+    @apply text-white/60;
     @apply transition-all duration-200;
-    @apply hover:bg-gray-100 dark:hover:bg-dark-800;
-    @apply hover:text-gray-900 dark:hover:text-white;
+    @apply hover:bg-electric-cyan/10 hover:text-electric-cyan;
   }
 
   .sidebar-link-active {
-    @apply bg-primary-50 dark:bg-primary-900/20;
-    @apply text-primary-600 dark:text-primary-400;
-    @apply hover:bg-primary-100 dark:hover:bg-primary-900/30;
+    @apply bg-electric-cyan/15;
+    @apply text-electric-cyan;
+    @apply shadow-glow-cyan;
   }
 
   .sidebar-section {
@@ -563,7 +558,7 @@
   .sidebar-section-title {
     @apply mb-2 px-3;
     @apply text-xs font-semibold uppercase tracking-wider;
-    @apply text-gray-400 dark:text-dark-500;
+    @apply text-white/40;
   }
 
   /* ============ 页面头部 ============ */
@@ -572,11 +567,11 @@
   }
 
   .page-title {
-    @apply text-2xl font-bold text-gray-900 dark:text-white;
+    @apply text-2xl font-bold text-white;
   }
 
   .page-description {
-    @apply mt-1 text-sm text-gray-500 dark:text-dark-400;
+    @apply mt-1 text-sm text-white/60;
   }
 
   /* ============ 空状态 ============ */
@@ -587,15 +582,15 @@
 
   .empty-state-icon {
     @apply mb-4 h-16 w-16;
-    @apply text-gray-300 dark:text-dark-600;
+    @apply text-white/30;
   }
 
   .empty-state-title {
-    @apply mb-1 text-lg font-medium text-gray-900 dark:text-white;
+    @apply mb-1 text-lg font-medium text-white;
   }
 
   .empty-state-description {
-    @apply max-w-sm text-sm text-gray-500 dark:text-dark-400;
+    @apply max-w-sm text-sm text-white/50;
   }
 
   /* ============ 加载状态 ============ */
@@ -605,52 +600,56 @@
   }
 
   .skeleton {
-    @apply animate-pulse rounded bg-gray-200 dark:bg-dark-700;
+    @apply animate-pulse rounded bg-space-card;
   }
 
   /* ============ 分隔线 ============ */
   .divider {
-    @apply my-4 h-px bg-gray-200 dark:bg-dark-700;
+    @apply my-4 h-px bg-space-border;
   }
 
   /* ============ 标签页 ============ */
   .tabs {
     @apply flex gap-1 p-1;
-    @apply rounded-xl bg-gray-100 dark:bg-dark-800;
+    @apply rounded-xl bg-space-card;
+    @apply border border-space-border;
   }
 
   .tab {
     @apply rounded-lg px-4 py-2 text-sm font-medium;
-    @apply text-gray-600 dark:text-dark-400;
+    @apply text-white/60;
     @apply transition-all duration-200;
-    @apply hover:text-gray-900 dark:hover:text-white;
+    @apply hover:text-electric-cyan;
   }
 
   .tab-active {
-    @apply bg-white dark:bg-dark-700;
-    @apply text-gray-900 dark:text-white;
-    @apply shadow-sm;
+    @apply bg-electric-cyan/15;
+    @apply text-electric-cyan;
+    @apply shadow-glow-cyan;
   }
 
   /* ============ 进度条 ============ */
   .progress {
-    @apply h-2 overflow-hidden rounded-full bg-gray-200 dark:bg-dark-700;
+    @apply h-2 overflow-hidden rounded-full bg-space-card;
+    @apply border border-space-border;
   }
 
   .progress-bar {
-    @apply h-full bg-gradient-to-r from-primary-500 to-primary-400;
+    @apply h-full bg-gradient-to-r from-electric-cyan to-neon-purple;
     @apply transition-all duration-300;
   }
 
   /* ============ 开关 ============ */
   .switch {
     @apply relative h-6 w-11 cursor-pointer rounded-full;
-    @apply bg-gray-300 dark:bg-dark-600;
+    @apply bg-space-card;
+    @apply border border-space-border;
     @apply transition-colors duration-200;
   }
 
   .switch-active {
-    @apply bg-primary-500;
+    @apply bg-electric-cyan;
+    @apply border-electric-cyan/50;
   }
 
   .switch-thumb {
@@ -666,15 +665,16 @@
   /* ============ 代码块 ============ */
   .code {
     @apply font-mono text-sm;
-    @apply bg-gray-100 dark:bg-dark-800;
+    @apply bg-space-card;
     @apply rounded px-1.5 py-0.5;
-    @apply text-primary-600 dark:text-primary-400;
+    @apply text-electric-cyan;
   }
 
   .code-block {
     @apply font-mono text-sm;
-    @apply bg-gray-900 text-gray-100;
+    @apply bg-deep-space text-electric-cyan;
     @apply overflow-x-auto rounded-xl p-4;
+    @apply border border-space-border;
   }
 
   /* ============ Tour Description ============ */
@@ -729,12 +729,12 @@
 @layer utilities {
   /* 文字渐变 */
   .text-gradient {
-    @apply bg-gradient-to-r from-primary-500 to-accent-500 bg-clip-text text-transparent;
+    @apply bg-gradient-to-r from-electric-cyan to-neon-purple bg-clip-text text-transparent;
   }
 
   /* 玻璃效果 */
   .glass {
-    @apply bg-white/80 backdrop-blur-xl dark:bg-dark-800/80;
+    @apply bg-space-card/80 backdrop-blur-xl;
   }
 
   /* 隐藏滚动条 */

@@ -8,13 +8,16 @@
   >
     <!-- Logo/Brand -->
     <div class="sidebar-header">
-      <!-- Custom Logo or Default Logo -->
-      <div class="flex h-9 w-9 items-center justify-center overflow-hidden rounded-xl shadow-glow">
-        <img v-if="settingsLoaded" :src="siteLogo || '/logo.png'" alt="Logo" class="h-full w-full object-contain" />
+      <!-- ZeroTrust AI Logo -->
+      <div class="flex h-9 w-9 items-center justify-center overflow-hidden rounded-xl bg-gradient-to-br from-electric-cyan to-neon-purple shadow-glow-cyan">
+        <svg v-if="settingsLoaded && siteLogo" :src="siteLogo" alt="Logo" class="h-full w-full object-contain" />
+        <svg v-else class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
+        </svg>
       </div>
       <transition name="fade">
         <div v-if="!sidebarCollapsed" class="flex flex-col">
-          <span class="text-lg font-bold text-gray-900 dark:text-white">
+          <span class="text-lg font-bold text-white">
             {{ siteName }}
           </span>
           <!-- Version Badge -->
@@ -60,7 +63,7 @@
           <div v-if="!sidebarCollapsed" class="sidebar-section-title">
             {{ t('nav.myAccount') }}
           </div>
-          <div v-else class="mx-3 my-3 h-px bg-gray-200 dark:bg-dark-700"></div>
+          <div v-else class="mx-3 my-3 h-px bg-space-border"></div>
 
           <router-link
             v-for="item in personalNavItems"
@@ -105,22 +108,7 @@
     </nav>
 
     <!-- Bottom Section -->
-    <div class="mt-auto border-t border-gray-100 p-3 dark:border-dark-800">
-      <!-- Theme Toggle -->
-      <button
-        @click="toggleTheme"
-        class="sidebar-link mb-2 w-full"
-        :title="sidebarCollapsed ? (isDark ? t('nav.lightMode') : t('nav.darkMode')) : undefined"
-      >
-        <SunIcon v-if="isDark" class="h-5 w-5 flex-shrink-0 text-amber-500" />
-        <MoonIcon v-else class="h-5 w-5 flex-shrink-0" />
-        <transition name="fade">
-          <span v-if="!sidebarCollapsed">{{
-            isDark ? t('nav.lightMode') : t('nav.darkMode')
-          }}</span>
-        </transition>
-      </button>
-
+    <div class="mt-auto border-t border-space-border p-3">
       <!-- Collapse Button -->
       <button
         @click="toggleSidebar"
@@ -227,21 +215,6 @@ const ChartIcon = {
     )
 }
 
-const GiftIcon = {
-  render: () =>
-    h(
-      'svg',
-      { fill: 'none', viewBox: '0 0 24 24', stroke: 'currentColor', 'stroke-width': '1.5' },
-      [
-        h('path', {
-          'stroke-linecap': 'round',
-          'stroke-linejoin': 'round',
-          d: 'M21 11.25v8.25a1.5 1.5 0 01-1.5 1.5H5.25a1.5 1.5 0 01-1.5-1.5v-8.25M12 4.875A2.625 2.625 0 109.375 7.5H12m0-2.625V7.5m0-2.625A2.625 2.625 0 1114.625 7.5H12m0 0V21m-8.625-9.75h18c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125h-18c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z'
-        })
-      ]
-    )
-}
-
 const UserIcon = {
   render: () =>
     h(
@@ -282,46 +255,6 @@ const FolderIcon = {
           'stroke-linecap': 'round',
           'stroke-linejoin': 'round',
           d: 'M2.25 12.75V12A2.25 2.25 0 014.5 9.75h15A2.25 2.25 0 0121.75 12v.75m-8.69-6.44l-2.12-2.12a1.5 1.5 0 00-1.061-.44H4.5A2.25 2.25 0 002.25 6v12a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9a2.25 2.25 0 00-2.25-2.25h-5.379a1.5 1.5 0 01-1.06-.44z'
-        })
-      ]
-    )
-}
-
-const CreditCardIcon = {
-  render: () =>
-    h(
-      'svg',
-      { fill: 'none', viewBox: '0 0 24 24', stroke: 'currentColor', 'stroke-width': '1.5' },
-      [
-        h('path', {
-          'stroke-linecap': 'round',
-          'stroke-linejoin': 'round',
-          d: 'M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5z'
-        })
-      ]
-    )
-}
-
-const RechargeSubscriptionIcon = {
-  render: () =>
-    h(
-      'svg',
-      { fill: 'currentColor', viewBox: '0 0 1024 1024' },
-      [
-        h('path', {
-          d: 'M512 992C247.3 992 32 776.7 32 512S247.3 32 512 32s480 215.3 480 480c0 84.4-22.2 167.4-64.2 240-8.9 15.3-28.4 20.6-43.7 11.7-15.3-8.8-20.5-28.4-11.7-43.7 36.4-62.9 55.6-134.8 55.6-208 0-229.4-186.6-416-416-416S96 282.6 96 512s186.6 416 416 416c17.7 0 32 14.3 32 32s-14.3 32-32 32z'
-        }),
-        h('path', {
-          d: 'M640 512H384c-17.7 0-32-14.3-32-32s14.3-32 32-32h256c17.7 0 32 14.3 32 32s-14.3 32-32 32zM640 640H384c-17.7 0-32-14.3-32-32s14.3-32 32-32h256c17.7 0 32 14.3 32 32s-14.3 32-32 32z'
-        }),
-        h('path', {
-          d: 'M512 480c-8.2 0-16.4-3.1-22.6-9.4l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l128 128c12.5 12.5 12.5 32.8 0 45.3-6.3 6.3-14.5 9.4-22.7 9.4z'
-        }),
-        h('path', {
-          d: 'M512 480c-8.2 0-16.4-3.1-22.6-9.4-12.5-12.5-12.5-32.8 0-45.3l128-128c12.5-12.5 32.8-12.5 45.3 0s12.5 32.8 0 45.3l-128 128c-6.3 6.3-14.5 9.4-22.7 9.4z'
-        }),
-        h('path', {
-          d: 'M512 736c-17.7 0-32-14.3-32-32V448c0-17.7 14.3-32 32-32s32 14.3 32 32v256c0 17.7-14.3 32-32 32zM896 992H512c-17.7 0-32-14.3-32-32s14.3-32 32-32h306.8l-73.4-73.4c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l128 128c9.2 9.2 11.9 22.9 6.9 34.9S908.9 992 896 992z'
         })
       ]
     )
@@ -372,21 +305,6 @@ const BellIcon = {
     )
 }
 
-const TicketIcon = {
-  render: () =>
-    h(
-      'svg',
-      { fill: 'none', viewBox: '0 0 24 24', stroke: 'currentColor', 'stroke-width': '1.5' },
-      [
-        h('path', {
-          'stroke-linecap': 'round',
-          'stroke-linejoin': 'round',
-          d: 'M16.5 6v.75m0 3v.75m0 3v.75m0 3V18m-9-5.25h5.25M7.5 15h3M3.375 5.25c-.621 0-1.125.504-1.125 1.125v3.026a2.999 2.999 0 010 5.198v3.026c0 .621.504 1.125 1.125 1.125h17.25c.621 0 1.125-.504 1.125-1.125v-3.026a2.999 2.999 0 010-5.198V6.375c0-.621-.504-1.125-1.125-1.125H3.375z'
-        })
-      ]
-    )
-}
-
 const CogIcon = {
   render: () =>
     h(
@@ -402,36 +320,6 @@ const CogIcon = {
           'stroke-linecap': 'round',
           'stroke-linejoin': 'round',
           d: 'M15 12a3 3 0 11-6 0 3 3 0 016 0z'
-        })
-      ]
-    )
-}
-
-const SunIcon = {
-  render: () =>
-    h(
-      'svg',
-      { fill: 'none', viewBox: '0 0 24 24', stroke: 'currentColor', 'stroke-width': '1.5' },
-      [
-        h('path', {
-          'stroke-linecap': 'round',
-          'stroke-linejoin': 'round',
-          d: 'M12 3v2.25m6.364.386l-1.591 1.591M21 12h-2.25m-.386 6.364l-1.591-1.591M12 18.75V21m-4.773-4.227l-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z'
-        })
-      ]
-    )
-}
-
-const MoonIcon = {
-  render: () =>
-    h(
-      'svg',
-      { fill: 'none', viewBox: '0 0 24 24', stroke: 'currentColor', 'stroke-width': '1.5' },
-      [
-        h('path', {
-          'stroke-linecap': 'round',
-          'stroke-linejoin': 'round',
-          d: 'M21.752 15.002A9.718 9.718 0 0118 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 003 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 009.002-5.998z'
         })
       ]
     )
@@ -482,27 +370,17 @@ const ChevronDoubleRightIcon = {
     )
 }
 
-// User navigation items (for regular users)
+// User navigation items (for regular users) - ZeroTrust AI Gateway version
 const userNavItems = computed((): NavItem[] => {
   const items: NavItem[] = [
     { path: '/dashboard', label: t('nav.dashboard'), icon: DashboardIcon },
     { path: '/keys', label: t('nav.apiKeys'), icon: KeyIcon },
     { path: '/usage', label: t('nav.usage'), icon: ChartIcon, hideInSimpleMode: true },
-    { path: '/subscriptions', label: t('nav.mySubscriptions'), icon: CreditCardIcon, hideInSimpleMode: true },
+    // Subscription-related items are hidden for ZeroTrust AI Gateway
     ...(appStore.cachedPublicSettings?.sora_client_enabled
       ? [{ path: '/sora', label: t('nav.sora'), icon: SoraIcon }]
       : []),
-    ...(appStore.cachedPublicSettings?.purchase_subscription_enabled
-      ? [
-          {
-            path: '/purchase',
-            label: t('nav.buySubscription'),
-            icon: RechargeSubscriptionIcon,
-            hideInSimpleMode: true
-          }
-        ]
-      : []),
-    { path: '/redeem', label: t('nav.redeem'), icon: GiftIcon, hideInSimpleMode: true },
+    // Hide purchase and subscription UI - ZeroTrust manages these internally
     { path: '/profile', label: t('nav.profile'), icon: UserIcon },
     ...customMenuItemsForUser.value.map((item): NavItem => ({
       path: `/custom/${item.id}`,
@@ -514,26 +392,16 @@ const userNavItems = computed((): NavItem[] => {
   return authStore.isSimpleMode ? items.filter(item => !item.hideInSimpleMode) : items
 })
 
-// Personal navigation items (for admin's "My Account" section, without Dashboard)
+// Personal navigation items (for admin's "My Account" section, without Dashboard) - ZeroTrust AI Gateway version
 const personalNavItems = computed((): NavItem[] => {
   const items: NavItem[] = [
     { path: '/keys', label: t('nav.apiKeys'), icon: KeyIcon },
     { path: '/usage', label: t('nav.usage'), icon: ChartIcon, hideInSimpleMode: true },
-    { path: '/subscriptions', label: t('nav.mySubscriptions'), icon: CreditCardIcon, hideInSimpleMode: true },
+    // Subscription-related items are hidden for ZeroTrust AI Gateway
     ...(appStore.cachedPublicSettings?.sora_client_enabled
       ? [{ path: '/sora', label: t('nav.sora'), icon: SoraIcon }]
       : []),
-    ...(appStore.cachedPublicSettings?.purchase_subscription_enabled
-      ? [
-          {
-            path: '/purchase',
-            label: t('nav.buySubscription'),
-            icon: RechargeSubscriptionIcon,
-            hideInSimpleMode: true
-          }
-        ]
-      : []),
-    { path: '/redeem', label: t('nav.redeem'), icon: GiftIcon, hideInSimpleMode: true },
+    // Hide purchase and subscription UI - ZeroTrust manages these internally
     { path: '/profile', label: t('nav.profile'), icon: UserIcon },
     ...customMenuItemsForUser.value.map((item): NavItem => ({
       path: `/custom/${item.id}`,
@@ -559,7 +427,7 @@ const customMenuItemsForAdmin = computed(() => {
     .sort((a, b) => a.sort_order - b.sort_order)
 })
 
-// Admin navigation items
+// Admin navigation items - ZeroTrust AI Gateway version
 const adminNavItems = computed((): NavItem[] => {
   const baseItems: NavItem[] = [
     { path: '/admin/dashboard', label: t('nav.dashboard'), icon: DashboardIcon },
@@ -568,12 +436,11 @@ const adminNavItems = computed((): NavItem[] => {
       : []),
     { path: '/admin/users', label: t('nav.users'), icon: UsersIcon, hideInSimpleMode: true },
     { path: '/admin/groups', label: t('nav.groups'), icon: FolderIcon, hideInSimpleMode: true },
-    { path: '/admin/subscriptions', label: t('nav.subscriptions'), icon: CreditCardIcon, hideInSimpleMode: true },
+    // Hide subscription management - ZeroTrust manages subscriptions internally
     { path: '/admin/accounts', label: t('nav.accounts'), icon: GlobeIcon },
     { path: '/admin/announcements', label: t('nav.announcements'), icon: BellIcon },
     { path: '/admin/proxies', label: t('nav.proxies'), icon: ServerIcon },
-    { path: '/admin/redeem', label: t('nav.redeemCodes'), icon: TicketIcon, hideInSimpleMode: true },
-    { path: '/admin/promo-codes', label: t('nav.promoCodes'), icon: GiftIcon, hideInSimpleMode: true },
+    // Hide redeem codes - not needed in ZeroTrust AI Gateway
     { path: '/admin/usage', label: t('nav.usage'), icon: ChartIcon }
   ]
 
@@ -599,12 +466,6 @@ const adminNavItems = computed((): NavItem[] => {
 
 function toggleSidebar() {
   appStore.toggleSidebar()
-}
-
-function toggleTheme() {
-  isDark.value = !isDark.value
-  document.documentElement.classList.toggle('dark', isDark.value)
-  localStorage.setItem('theme', isDark.value ? 'dark' : 'light')
 }
 
 function closeMobile() {
@@ -635,15 +496,9 @@ function isActive(path: string): boolean {
   return route.path === path || route.path.startsWith(path + '/')
 }
 
-// Initialize theme
-const savedTheme = localStorage.getItem('theme')
-if (
-  savedTheme === 'dark' ||
-  (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)
-) {
-  isDark.value = true
-  document.documentElement.classList.add('dark')
-}
+// Initialize theme - Always use dark mode for ZeroTrust AI
+isDark.value = true
+document.documentElement.classList.add('dark')
 
 // Fetch admin settings (for feature-gated nav items like Ops).
 watch(

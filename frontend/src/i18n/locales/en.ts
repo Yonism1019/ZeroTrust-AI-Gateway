@@ -523,6 +523,27 @@ export default {
     addBalanceWithCode: 'Add balance with a code'
   },
 
+  // Security Dashboard
+  security: {
+    dashboard: 'Security Dashboard',
+    dashboardDesc: 'ZeroTrust AI Gateway Real-time Security Monitoring',
+    aiTraffic: 'AI Traffic',
+    blockedThreats: 'Threats Blocked',
+    activePolicies: 'Active Policies',
+    activeModels: 'Active Models',
+    totalRequests: 'Total Requests',
+    dataLeakagePrevented: 'Data Leaks Prevented',
+    shadowAIDetected: 'Shadow AI Detected',
+    costSavings: 'Cost Savings',
+    riskEvents: 'Risk Events',
+    threatActivity: 'Threat Activity',
+    chartPlaceholder: 'Loading chart...',
+    recentAlerts: 'Recent Alerts',
+    noAlerts: 'No alerts',
+    policyOverview: 'Policy Overview',
+    modelDistribution: 'Model Distribution'
+  },
+
   // Groups (shared)
   groups: {
     subscription: 'Sub'

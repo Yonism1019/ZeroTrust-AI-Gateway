@@ -151,6 +151,7 @@ type APIKeyAuthCacheInvalidator interface {
 type CreateAPIKeyRequest struct {
 	Name        string   `json:"name"`
 	GroupID     *int64   `json:"group_id"`
+	AccountID   *int64   `json:"account_id"`   // Bound upstream account ID (optional)
 	CustomKey   *string  `json:"custom_key"`   // 可选的自定义key
 	IPWhitelist []string `json:"ip_whitelist"` // IP 白名单
 	IPBlacklist []string `json:"ip_blacklist"` // IP 黑名单
@@ -198,6 +199,7 @@ type APIKeyService struct {
 	groupRepo             GroupRepository
 	userSubRepo           UserSubscriptionRepository
 	userGroupRateRepo     UserGroupRateRepository
+	accountRepo           AccountRepository // for GetAvailableAccounts
 	cache                 APIKeyCache
 	rateLimitCacheInvalid RateLimitCacheInvalidator // optional: invalidate Redis rate limit cache
 	cfg                   *config.Config
@@ -215,6 +217,7 @@ func NewAPIKeyService(
 	groupRepo GroupRepository,
 	userSubRepo UserSubscriptionRepository,
 	userGroupRateRepo UserGroupRateRepository,
+	accountRepo AccountRepository,
 	cache APIKeyCache,
 	cfg *config.Config,
 ) *APIKeyService {
@@ -224,6 +227,7 @@ func NewAPIKeyService(
 		groupRepo:         groupRepo,
 		userSubRepo:       userSubRepo,
 		userGroupRateRepo: userGroupRateRepo,
+		accountRepo:       accountRepo,
 		cache:             cache,
 		cfg:               cfg,
 	}
@@ -401,6 +405,7 @@ func (s *APIKeyService) Create(ctx context.Context, userID int64, req CreateAPIK
 		Key:         key,
 		Name:        req.Name,
 		GroupID:     req.GroupID,
+		AccountID:   req.AccountID,
 		Status:      StatusActive,
 		IPWhitelist: req.IPWhitelist,
 		IPBlacklist: req.IPBlacklist,
@@ -783,6 +788,56 @@ func (s *APIKeyService) canUserBindGroupInternal(user *User, group *Group, subsc
 	}
 	// 标准类型分组：使用原有逻辑
 	return user.CanBindGroup(group.ID, group.IsExclusive)
+}
+
+// GetAvailableAccounts 获取用户可用的账户列表（用于API密钥绑定）
+// 返回用户有权限访问的分组中的所有活跃账户
+func (s *APIKeyService) GetAvailableAccounts(ctx context.Context, userID int64) ([]Account, error) {
+	if s.accountRepo == nil {
+		return nil, fmt.Errorf("accountRepo not initialized")
+	}
+
+	// 获取用户可用的分组
+	availableGroups, err := s.GetAvailableGroups(ctx, userID)
+	if err != nil {
+		return nil, fmt.Errorf("get available groups: %w", err)
+	}
+
+	if len(availableGroups) == 0 {
+		return nil, nil
+	}
+
+	// 提取分组ID
+	groupIDs := make([]int64, 0, len(availableGroups))
+	for _, g := range availableGroups {
+		groupIDs = append(groupIDs, g.ID)
+	}
+
+	// 获取这些分组关联的账户ID
+	accountIDs, err := s.groupRepo.GetAccountIDsByGroupIDs(ctx, groupIDs)
+	if err != nil {
+		return nil, fmt.Errorf("get account IDs by group IDs: %w", err)
+	}
+
+	if len(accountIDs) == 0 {
+		return nil, nil
+	}
+
+	// 获取账户详情
+	accounts, err := s.accountRepo.GetByIDs(ctx, accountIDs)
+	if err != nil {
+		return nil, fmt.Errorf("get accounts by IDs: %w", err)
+	}
+
+	// 过滤出活跃账户
+	activeAccounts := make([]Account, 0, len(accounts))
+	for _, acc := range accounts {
+		if acc != nil && acc.Status == StatusActive {
+			activeAccounts = append(activeAccounts, *acc)
+		}
+	}
+
+	return activeAccounts, nil
 }
 
 func (s *APIKeyService) SearchAPIKeys(ctx context.Context, userID int64, keyword string, limit int) ([]APIKey, error) {

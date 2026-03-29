@@ -1,16 +1,33 @@
 import { motion } from 'framer-motion';
-import { 
-  AlertTriangle, 
-  EyeOff, 
-  DollarSign, 
-  ShieldAlert, 
+import {
+  AlertTriangle,
+  EyeOff,
+  DollarSign,
+  ShieldAlert,
   FileWarning,
   Code,
   Key,
   Terminal,
-  Scale
+  Scale,
+  Globe,
+  TrendingUp,
+  Shield,
+  AlertCircle
 } from 'lucide-react';
 import { ScrollReveal, StaggerContainer, StaggerItem } from '../components/ScrollReveal';
+
+const marketStats = [
+  { value: '$24.1亿', label: '全球AI网关市场规模', sub: '2024年', icon: Globe },
+  { value: '$120.8亿', label: '2033年预计规模', sub: 'CAGR 18.7%', icon: TrendingUp },
+  { value: '93%', label: 'IT负责人担忧AI安全', sub: '数据泄露风险', icon: Shield },
+  { value: '42.9%', label: '中国市场的CAGR增速', sub: '远超全球平均水平', icon: AlertCircle },
+];
+
+const regulatoryChallenges = [
+  { region: '欧盟', act: 'EU AI Act', penalty: '最高3500万欧元或营收7%', requirement: '高风险AI需风险评估、透明度' },
+  { region: '中国', act: '等保2.0', penalty: '行政处罚、业务停业', requirement: '网络安全等级保护合规' },
+  { region: '美国', act: 'SOC2/HIPAA', penalty: '高额罚款、信任丧失', requirement: '数据安全与隐私保护' },
+];
 
 const painPoints = [
   {
@@ -47,6 +64,13 @@ const painPoints = [
     description: '无完整的AI行为日志，无法满足合规要求',
     severity: '高',
     color: 'yellow-500',
+  },
+  {
+    icon: FileWarning,
+    title: '建设困难',
+    description: '市面无成熟AI网关方案，定制费用高昂，产品缺少市场检验',
+    severity: '极高',
+    color: 'alert-red',
   },
 ];
 
@@ -95,6 +119,53 @@ export function PainPoints() {
           </div>
         </ScrollReveal>
 
+        {/* Market Stats */}
+        <ScrollReveal>
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-16">
+            {marketStats.map((stat) => (
+              <motion.div
+                key={stat.label}
+                className="glass rounded-xl p-4 text-center border border-white/5"
+                whileHover={{ y: -4 }}
+              >
+                <stat.icon className="w-8 h-8 mx-auto mb-2 text-alert-red" />
+                <div className="text-2xl font-bold text-white mb-1">{stat.value}</div>
+                <div className="text-sm text-silver mb-1">{stat.label}</div>
+                <div className="text-xs text-silver/60">{stat.sub}</div>
+              </motion.div>
+            ))}
+          </div>
+        </ScrollReveal>
+
+        {/* Regulatory Challenges */}
+        <ScrollReveal>
+          <div className="mb-16">
+            <h3 className="text-2xl font-bold text-white text-center mb-8">
+              全球AI监管格局
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {regulatoryChallenges.map((item) => (
+                <motion.div
+                  key={item.region}
+                  className="glass rounded-xl p-5 border border-white/5"
+                  whileHover={{ y: -4 }}
+                >
+                  <div className="flex items-center gap-2 mb-3">
+                    <span className="px-3 py-1 rounded-full bg-alert-red/10 text-alert-red text-sm font-medium">
+                      {item.region}
+                    </span>
+                    <span className="text-white font-semibold">{item.act}</span>
+                  </div>
+                  <p className="text-sm text-alert-red mb-2">💰 {item.penalty}</p>
+                  <p className="text-silver text-sm">{item.requirement}</p>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </ScrollReveal>
+        <h3 className="text-2xl font-bold text-white text-center mb-8">
+          企业面临AI痛点
+        </h3>
         {/* Pain Points Grid */}
         <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-20">
           {painPoints.map((point) => (

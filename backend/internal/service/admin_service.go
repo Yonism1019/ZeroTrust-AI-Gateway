@@ -201,6 +201,11 @@ type UpdateGroupInput struct {
 	// OpenAI Messages 调度配置（仅 openai 平台使用）
 	AllowMessagesDispatch *bool
 	DefaultMappedModel    *string
+	// 安全等级配置
+	SecurityLevel *string
+	L1Enabled     *bool
+	L2Enabled     *bool
+	L3Enabled     *bool
 	// 从指定分组复制账号（同步操作：先清空当前分组的账号绑定，再绑定源分组的账号）
 	CopyAccountsFromGroupIDs []int64
 }
@@ -1156,6 +1161,20 @@ func (s *adminServiceImpl) UpdateGroup(ctx context.Context, id int64, input *Upd
 	}
 	if input.DefaultMappedModel != nil {
 		group.DefaultMappedModel = *input.DefaultMappedModel
+	}
+
+	// 安全等级配置
+	if input.SecurityLevel != nil {
+		group.SecurityLevel = *input.SecurityLevel
+	}
+	if input.L1Enabled != nil {
+		group.L1Enabled = *input.L1Enabled
+	}
+	if input.L2Enabled != nil {
+		group.L2Enabled = *input.L2Enabled
+	}
+	if input.L3Enabled != nil {
+		group.L3Enabled = *input.L3Enabled
 	}
 
 	if err := s.groupRepo.Update(ctx, group); err != nil {

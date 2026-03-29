@@ -82,6 +82,14 @@ type Group struct {
 	AllowMessagesDispatch bool `json:"allow_messages_dispatch,omitempty"`
 	// 默认映射模型 ID，当账号级映射找不到时使用此值
 	DefaultMappedModel string `json:"default_mapped_model,omitempty"`
+	// 安全等级: none, basic, standard, strict
+	SecurityLevel string `json:"security_level,omitempty"`
+	// L1检测启用 (API密钥、数据库连接、私钥)
+	L1Enabled bool `json:"l1_enabled,omitempty"`
+	// L2检测启用 (NER智能脱敏)
+	L2Enabled bool `json:"l2_enabled,omitempty"`
+	// L3检测启用 (语义风险评估)
+	L3Enabled bool `json:"l3_enabled,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the GroupQuery when eager-loading is set.
 	Edges        GroupEdges `json:"edges"`
@@ -190,13 +198,13 @@ func (*Group) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case group.FieldModelRouting, group.FieldSupportedModelScopes:
 			values[i] = new([]byte)
-		case group.FieldIsExclusive, group.FieldClaudeCodeOnly, group.FieldModelRoutingEnabled, group.FieldMcpXMLInject, group.FieldAllowMessagesDispatch:
+		case group.FieldIsExclusive, group.FieldClaudeCodeOnly, group.FieldModelRoutingEnabled, group.FieldMcpXMLInject, group.FieldAllowMessagesDispatch, group.FieldL1Enabled, group.FieldL2Enabled, group.FieldL3Enabled:
 			values[i] = new(sql.NullBool)
 		case group.FieldRateMultiplier, group.FieldDailyLimitUsd, group.FieldWeeklyLimitUsd, group.FieldMonthlyLimitUsd, group.FieldImagePrice1k, group.FieldImagePrice2k, group.FieldImagePrice4k, group.FieldSoraImagePrice360, group.FieldSoraImagePrice540, group.FieldSoraVideoPricePerRequest, group.FieldSoraVideoPricePerRequestHd:
 			values[i] = new(sql.NullFloat64)
 		case group.FieldID, group.FieldDefaultValidityDays, group.FieldSoraStorageQuotaBytes, group.FieldFallbackGroupID, group.FieldFallbackGroupIDOnInvalidRequest, group.FieldSortOrder:
 			values[i] = new(sql.NullInt64)
-		case group.FieldName, group.FieldDescription, group.FieldStatus, group.FieldPlatform, group.FieldSubscriptionType, group.FieldDefaultMappedModel:
+		case group.FieldName, group.FieldDescription, group.FieldStatus, group.FieldPlatform, group.FieldSubscriptionType, group.FieldDefaultMappedModel, group.FieldSecurityLevel:
 			values[i] = new(sql.NullString)
 		case group.FieldCreatedAt, group.FieldUpdatedAt, group.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -431,6 +439,30 @@ func (_m *Group) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.DefaultMappedModel = value.String
 			}
+		case group.FieldSecurityLevel:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field security_level", values[i])
+			} else if value.Valid {
+				_m.SecurityLevel = value.String
+			}
+		case group.FieldL1Enabled:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field l1_enabled", values[i])
+			} else if value.Valid {
+				_m.L1Enabled = value.Bool
+			}
+		case group.FieldL2Enabled:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field l2_enabled", values[i])
+			} else if value.Valid {
+				_m.L2Enabled = value.Bool
+			}
+		case group.FieldL3Enabled:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field l3_enabled", values[i])
+			} else if value.Valid {
+				_m.L3Enabled = value.Bool
+			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -630,6 +662,18 @@ func (_m *Group) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("default_mapped_model=")
 	builder.WriteString(_m.DefaultMappedModel)
+	builder.WriteString(", ")
+	builder.WriteString("security_level=")
+	builder.WriteString(_m.SecurityLevel)
+	builder.WriteString(", ")
+	builder.WriteString("l1_enabled=")
+	builder.WriteString(fmt.Sprintf("%v", _m.L1Enabled))
+	builder.WriteString(", ")
+	builder.WriteString("l2_enabled=")
+	builder.WriteString(fmt.Sprintf("%v", _m.L2Enabled))
+	builder.WriteString(", ")
+	builder.WriteString("l3_enabled=")
+	builder.WriteString(fmt.Sprintf("%v", _m.L3Enabled))
 	builder.WriteByte(')')
 	return builder.String()
 }

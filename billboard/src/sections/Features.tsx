@@ -37,7 +37,7 @@ const featureModules = [
     features: [
       { icon: Globe, title: '统一API出口', desc: '兼容OpenAI/Claude/国产模型' },
       { icon: RefreshCw, title: '多模型热切换', desc: '无感知动态切换' },
-      { icon: Database, title: 'Token优化缓存', desc: '节省30%-50%成本' },
+      { icon: Database, title: '负载均衡', desc: '动态分配模型资源' },
     ],
   },
   {
@@ -195,10 +195,7 @@ export function Features() {
                     <span className="w-1.5 h-1.5 rounded-full bg-neon-purple" />
                     负载均衡
                   </li>
-                  <li className="flex items-center gap-2">
-                    <span className="w-1.5 h-1.5 rounded-full bg-neon-purple" />
-                    本地缓存
-                  </li>
+
                 </ul>
               </div>
               <div>

@@ -281,6 +281,52 @@ func (h *GatewayHandler) Messages(c *gin.Context) {
 	// 判断是否真的绑定了粘性会话：有 sessionKey 且已经绑定到某个账号
 	hasBoundSession := sessionKey != "" && sessionBoundAccountID > 0
 
+	// 如果API密钥绑定了特定账号，直接使用该账号（跳过正常的分组调度逻辑）
+	var boundAccount *service.Account
+	var boundAccountReleaseFunc func()
+	if apiKey.AccountID != nil && *apiKey.AccountID > 0 {
+		account, err := h.gatewayService.GetBoundAccount(c.Request.Context(), *apiKey.AccountID)
+		if err != nil {
+			h.handleStreamingAwareError(c, http.StatusBadRequest, "invalid_request", "Bound account is not available: "+err.Error(), streamStarted)
+			return
+		}
+		boundAccount = account
+		setOpsSelectedAccount(c, account.ID, account.Platform)
+		// 获取并发槽位
+		releaseFunc, acquired, err := h.concurrencyHelper.TryAcquireAccountSlot(c.Request.Context(), account.ID, account.Concurrency)
+		if err != nil {
+			h.handleStreamingAwareError(c, http.StatusServiceUnavailable, "api_error", "Account slot acquisition failed: "+err.Error(), streamStarted)
+			return
+		}
+		if acquired {
+			boundAccountReleaseFunc = releaseFunc
+		}
+	}
+
+	if boundAccount != nil {
+		// 使用绑定的账号直接转发，跳过正常的分组调度和failover逻辑
+		account := boundAccount
+		accountReleaseFunc := boundAccountReleaseFunc
+		if accountReleaseFunc != nil {
+			accountReleaseFunc = wrapReleaseOnDone(c.Request.Context(), accountReleaseFunc)
+		}
+		// 根据账号平台转发
+		var err error
+		requestCtx := c.Request.Context()
+		if account.Platform == service.PlatformAntigravity {
+			_, err = h.antigravityGatewayService.ForwardGemini(requestCtx, c, account, reqModel, "generateContent", reqStream, body, false)
+		} else {
+			_, err = h.geminiCompatService.Forward(requestCtx, c, account, body)
+		}
+		if accountReleaseFunc != nil {
+			accountReleaseFunc()
+		}
+		if err != nil {
+			h.ensureForwardErrorResponse(c, streamStarted)
+		}
+		return
+	}
+
 	if platform == service.PlatformGemini {
 		fs := NewFailoverState(h.maxAccountSwitchesGemini, hasBoundSession)
 

@@ -61,6 +61,12 @@ type Group struct {
 	AllowMessagesDispatch bool
 	DefaultMappedModel    string
 
+	// 安全等级配置
+	SecurityLevel string
+	L1Enabled     bool
+	L2Enabled     bool
+	L3Enabled     bool
+
 	CreatedAt time.Time
 	UpdatedAt time.Time
 

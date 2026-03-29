@@ -73,7 +73,7 @@ export function Navbar() {
 
             {/* CTA Button */}
             <div className="hidden md:block">
-              <GlowButton size="sm">立即体验</GlowButton>
+              <GlowButton size="sm" onClick={() => window.open('http://zeroai.yonism.cn/', '_blank')}>立即体验</GlowButton>
             </div>
 
             {/* Mobile Menu Button */}
@@ -111,7 +111,7 @@ export function Navbar() {
                   {link.label}
                 </motion.a>
               ))}
-              <GlowButton className="mt-4">立即体验</GlowButton>
+              <GlowButton className="mt-4" onClick={() => { window.open('http://zeroai.yonism.cn/', '_blank'); setIsMobileMenuOpen(false); }}>立即体验</GlowButton>
             </div>
           </motion.div>
         )}

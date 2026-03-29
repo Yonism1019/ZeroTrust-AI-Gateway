@@ -151,6 +151,11 @@ type UpdateGroupRequest struct {
 	// OpenAI Messages 调度配置（仅 openai 平台使用）
 	AllowMessagesDispatch *bool   `json:"allow_messages_dispatch"`
 	DefaultMappedModel    *string `json:"default_mapped_model"`
+	// 安全等级配置
+	SecurityLevel *string `json:"security_level" binding:"omitempty,oneof=none basic standard strict"`
+	L1Enabled     *bool   `json:"l1_enabled"`
+	L2Enabled     *bool   `json:"l2_enabled"`
+	L3Enabled     *bool   `json:"l3_enabled"`
 	// 从指定分组复制账号（同步操作：先清空当前分组的账号绑定，再绑定源分组的账号）
 	CopyAccountsFromGroupIDs []int64 `json:"copy_accounts_from_group_ids"`
 }
@@ -321,6 +326,10 @@ func (h *GroupHandler) Update(c *gin.Context) {
 		SoraStorageQuotaBytes:           req.SoraStorageQuotaBytes,
 		AllowMessagesDispatch:           req.AllowMessagesDispatch,
 		DefaultMappedModel:              req.DefaultMappedModel,
+		SecurityLevel:                   req.SecurityLevel,
+		L1Enabled:                       req.L1Enabled,
+		L2Enabled:                       req.L2Enabled,
+		L3Enabled:                       req.L3Enabled,
 		CopyAccountsFromGroupIDs:        req.CopyAccountsFromGroupIDs,
 	})
 	if err != nil {

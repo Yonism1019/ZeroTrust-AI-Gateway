@@ -653,6 +653,62 @@ func (_u *GroupUpdate) SetNillableDefaultMappedModel(v *string) *GroupUpdate {
 	return _u
 }
 
+// SetSecurityLevel sets the "security_level" field.
+func (_u *GroupUpdate) SetSecurityLevel(v string) *GroupUpdate {
+	_u.mutation.SetSecurityLevel(v)
+	return _u
+}
+
+// SetNillableSecurityLevel sets the "security_level" field if the given value is not nil.
+func (_u *GroupUpdate) SetNillableSecurityLevel(v *string) *GroupUpdate {
+	if v != nil {
+		_u.SetSecurityLevel(*v)
+	}
+	return _u
+}
+
+// SetL1Enabled sets the "l1_enabled" field.
+func (_u *GroupUpdate) SetL1Enabled(v bool) *GroupUpdate {
+	_u.mutation.SetL1Enabled(v)
+	return _u
+}
+
+// SetNillableL1Enabled sets the "l1_enabled" field if the given value is not nil.
+func (_u *GroupUpdate) SetNillableL1Enabled(v *bool) *GroupUpdate {
+	if v != nil {
+		_u.SetL1Enabled(*v)
+	}
+	return _u
+}
+
+// SetL2Enabled sets the "l2_enabled" field.
+func (_u *GroupUpdate) SetL2Enabled(v bool) *GroupUpdate {
+	_u.mutation.SetL2Enabled(v)
+	return _u
+}
+
+// SetNillableL2Enabled sets the "l2_enabled" field if the given value is not nil.
+func (_u *GroupUpdate) SetNillableL2Enabled(v *bool) *GroupUpdate {
+	if v != nil {
+		_u.SetL2Enabled(*v)
+	}
+	return _u
+}
+
+// SetL3Enabled sets the "l3_enabled" field.
+func (_u *GroupUpdate) SetL3Enabled(v bool) *GroupUpdate {
+	_u.mutation.SetL3Enabled(v)
+	return _u
+}
+
+// SetNillableL3Enabled sets the "l3_enabled" field if the given value is not nil.
+func (_u *GroupUpdate) SetNillableL3Enabled(v *bool) *GroupUpdate {
+	if v != nil {
+		_u.SetL3Enabled(*v)
+	}
+	return _u
+}
+
 // AddAPIKeyIDs adds the "api_keys" edge to the APIKey entity by IDs.
 func (_u *GroupUpdate) AddAPIKeyIDs(ids ...int64) *GroupUpdate {
 	_u.mutation.AddAPIKeyIDs(ids...)
@@ -943,6 +999,11 @@ func (_u *GroupUpdate) check() error {
 			return &ValidationError{Name: "default_mapped_model", err: fmt.Errorf(`ent: validator failed for field "Group.default_mapped_model": %w`, err)}
 		}
 	}
+	if v, ok := _u.mutation.SecurityLevel(); ok {
+		if err := group.SecurityLevelValidator(v); err != nil {
+			return &ValidationError{Name: "security_level", err: fmt.Errorf(`ent: validator failed for field "Group.security_level": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -1148,6 +1209,18 @@ func (_u *GroupUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if value, ok := _u.mutation.DefaultMappedModel(); ok {
 		_spec.SetField(group.FieldDefaultMappedModel, field.TypeString, value)
+	}
+	if value, ok := _u.mutation.SecurityLevel(); ok {
+		_spec.SetField(group.FieldSecurityLevel, field.TypeString, value)
+	}
+	if value, ok := _u.mutation.L1Enabled(); ok {
+		_spec.SetField(group.FieldL1Enabled, field.TypeBool, value)
+	}
+	if value, ok := _u.mutation.L2Enabled(); ok {
+		_spec.SetField(group.FieldL2Enabled, field.TypeBool, value)
+	}
+	if value, ok := _u.mutation.L3Enabled(); ok {
+		_spec.SetField(group.FieldL3Enabled, field.TypeBool, value)
 	}
 	if _u.mutation.APIKeysCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -2081,6 +2154,62 @@ func (_u *GroupUpdateOne) SetNillableDefaultMappedModel(v *string) *GroupUpdateO
 	return _u
 }
 
+// SetSecurityLevel sets the "security_level" field.
+func (_u *GroupUpdateOne) SetSecurityLevel(v string) *GroupUpdateOne {
+	_u.mutation.SetSecurityLevel(v)
+	return _u
+}
+
+// SetNillableSecurityLevel sets the "security_level" field if the given value is not nil.
+func (_u *GroupUpdateOne) SetNillableSecurityLevel(v *string) *GroupUpdateOne {
+	if v != nil {
+		_u.SetSecurityLevel(*v)
+	}
+	return _u
+}
+
+// SetL1Enabled sets the "l1_enabled" field.
+func (_u *GroupUpdateOne) SetL1Enabled(v bool) *GroupUpdateOne {
+	_u.mutation.SetL1Enabled(v)
+	return _u
+}
+
+// SetNillableL1Enabled sets the "l1_enabled" field if the given value is not nil.
+func (_u *GroupUpdateOne) SetNillableL1Enabled(v *bool) *GroupUpdateOne {
+	if v != nil {
+		_u.SetL1Enabled(*v)
+	}
+	return _u
+}
+
+// SetL2Enabled sets the "l2_enabled" field.
+func (_u *GroupUpdateOne) SetL2Enabled(v bool) *GroupUpdateOne {
+	_u.mutation.SetL2Enabled(v)
+	return _u
+}
+
+// SetNillableL2Enabled sets the "l2_enabled" field if the given value is not nil.
+func (_u *GroupUpdateOne) SetNillableL2Enabled(v *bool) *GroupUpdateOne {
+	if v != nil {
+		_u.SetL2Enabled(*v)
+	}
+	return _u
+}
+
+// SetL3Enabled sets the "l3_enabled" field.
+func (_u *GroupUpdateOne) SetL3Enabled(v bool) *GroupUpdateOne {
+	_u.mutation.SetL3Enabled(v)
+	return _u
+}
+
+// SetNillableL3Enabled sets the "l3_enabled" field if the given value is not nil.
+func (_u *GroupUpdateOne) SetNillableL3Enabled(v *bool) *GroupUpdateOne {
+	if v != nil {
+		_u.SetL3Enabled(*v)
+	}
+	return _u
+}
+
 // AddAPIKeyIDs adds the "api_keys" edge to the APIKey entity by IDs.
 func (_u *GroupUpdateOne) AddAPIKeyIDs(ids ...int64) *GroupUpdateOne {
 	_u.mutation.AddAPIKeyIDs(ids...)
@@ -2384,6 +2513,11 @@ func (_u *GroupUpdateOne) check() error {
 			return &ValidationError{Name: "default_mapped_model", err: fmt.Errorf(`ent: validator failed for field "Group.default_mapped_model": %w`, err)}
 		}
 	}
+	if v, ok := _u.mutation.SecurityLevel(); ok {
+		if err := group.SecurityLevelValidator(v); err != nil {
+			return &ValidationError{Name: "security_level", err: fmt.Errorf(`ent: validator failed for field "Group.security_level": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -2606,6 +2740,18 @@ func (_u *GroupUpdateOne) sqlSave(ctx context.Context) (_node *Group, err error)
 	}
 	if value, ok := _u.mutation.DefaultMappedModel(); ok {
 		_spec.SetField(group.FieldDefaultMappedModel, field.TypeString, value)
+	}
+	if value, ok := _u.mutation.SecurityLevel(); ok {
+		_spec.SetField(group.FieldSecurityLevel, field.TypeString, value)
+	}
+	if value, ok := _u.mutation.L1Enabled(); ok {
+		_spec.SetField(group.FieldL1Enabled, field.TypeBool, value)
+	}
+	if value, ok := _u.mutation.L2Enabled(); ok {
+		_spec.SetField(group.FieldL2Enabled, field.TypeBool, value)
+	}
+	if value, ok := _u.mutation.L3Enabled(); ok {
+		_spec.SetField(group.FieldL3Enabled, field.TypeBool, value)
 	}
 	if _u.mutation.APIKeysCleared() {
 		edge := &sqlgraph.EdgeSpec{

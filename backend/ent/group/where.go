@@ -205,6 +205,26 @@ func DefaultMappedModel(v string) predicate.Group {
 	return predicate.Group(sql.FieldEQ(FieldDefaultMappedModel, v))
 }
 
+// SecurityLevel applies equality check predicate on the "security_level" field. It's identical to SecurityLevelEQ.
+func SecurityLevel(v string) predicate.Group {
+	return predicate.Group(sql.FieldEQ(FieldSecurityLevel, v))
+}
+
+// L1Enabled applies equality check predicate on the "l1_enabled" field. It's identical to L1EnabledEQ.
+func L1Enabled(v bool) predicate.Group {
+	return predicate.Group(sql.FieldEQ(FieldL1Enabled, v))
+}
+
+// L2Enabled applies equality check predicate on the "l2_enabled" field. It's identical to L2EnabledEQ.
+func L2Enabled(v bool) predicate.Group {
+	return predicate.Group(sql.FieldEQ(FieldL2Enabled, v))
+}
+
+// L3Enabled applies equality check predicate on the "l3_enabled" field. It's identical to L3EnabledEQ.
+func L3Enabled(v bool) predicate.Group {
+	return predicate.Group(sql.FieldEQ(FieldL3Enabled, v))
+}
+
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
 func CreatedAtEQ(v time.Time) predicate.Group {
 	return predicate.Group(sql.FieldEQ(FieldCreatedAt, v))
@@ -1553,6 +1573,101 @@ func DefaultMappedModelEqualFold(v string) predicate.Group {
 // DefaultMappedModelContainsFold applies the ContainsFold predicate on the "default_mapped_model" field.
 func DefaultMappedModelContainsFold(v string) predicate.Group {
 	return predicate.Group(sql.FieldContainsFold(FieldDefaultMappedModel, v))
+}
+
+// SecurityLevelEQ applies the EQ predicate on the "security_level" field.
+func SecurityLevelEQ(v string) predicate.Group {
+	return predicate.Group(sql.FieldEQ(FieldSecurityLevel, v))
+}
+
+// SecurityLevelNEQ applies the NEQ predicate on the "security_level" field.
+func SecurityLevelNEQ(v string) predicate.Group {
+	return predicate.Group(sql.FieldNEQ(FieldSecurityLevel, v))
+}
+
+// SecurityLevelIn applies the In predicate on the "security_level" field.
+func SecurityLevelIn(vs ...string) predicate.Group {
+	return predicate.Group(sql.FieldIn(FieldSecurityLevel, vs...))
+}
+
+// SecurityLevelNotIn applies the NotIn predicate on the "security_level" field.
+func SecurityLevelNotIn(vs ...string) predicate.Group {
+	return predicate.Group(sql.FieldNotIn(FieldSecurityLevel, vs...))
+}
+
+// SecurityLevelGT applies the GT predicate on the "security_level" field.
+func SecurityLevelGT(v string) predicate.Group {
+	return predicate.Group(sql.FieldGT(FieldSecurityLevel, v))
+}
+
+// SecurityLevelGTE applies the GTE predicate on the "security_level" field.
+func SecurityLevelGTE(v string) predicate.Group {
+	return predicate.Group(sql.FieldGTE(FieldSecurityLevel, v))
+}
+
+// SecurityLevelLT applies the LT predicate on the "security_level" field.
+func SecurityLevelLT(v string) predicate.Group {
+	return predicate.Group(sql.FieldLT(FieldSecurityLevel, v))
+}
+
+// SecurityLevelLTE applies the LTE predicate on the "security_level" field.
+func SecurityLevelLTE(v string) predicate.Group {
+	return predicate.Group(sql.FieldLTE(FieldSecurityLevel, v))
+}
+
+// SecurityLevelContains applies the Contains predicate on the "security_level" field.
+func SecurityLevelContains(v string) predicate.Group {
+	return predicate.Group(sql.FieldContains(FieldSecurityLevel, v))
+}
+
+// SecurityLevelHasPrefix applies the HasPrefix predicate on the "security_level" field.
+func SecurityLevelHasPrefix(v string) predicate.Group {
+	return predicate.Group(sql.FieldHasPrefix(FieldSecurityLevel, v))
+}
+
+// SecurityLevelHasSuffix applies the HasSuffix predicate on the "security_level" field.
+func SecurityLevelHasSuffix(v string) predicate.Group {
+	return predicate.Group(sql.FieldHasSuffix(FieldSecurityLevel, v))
+}
+
+// SecurityLevelEqualFold applies the EqualFold predicate on the "security_level" field.
+func SecurityLevelEqualFold(v string) predicate.Group {
+	return predicate.Group(sql.FieldEqualFold(FieldSecurityLevel, v))
+}
+
+// SecurityLevelContainsFold applies the ContainsFold predicate on the "security_level" field.
+func SecurityLevelContainsFold(v string) predicate.Group {
+	return predicate.Group(sql.FieldContainsFold(FieldSecurityLevel, v))
+}
+
+// L1EnabledEQ applies the EQ predicate on the "l1_enabled" field.
+func L1EnabledEQ(v bool) predicate.Group {
+	return predicate.Group(sql.FieldEQ(FieldL1Enabled, v))
+}
+
+// L1EnabledNEQ applies the NEQ predicate on the "l1_enabled" field.
+func L1EnabledNEQ(v bool) predicate.Group {
+	return predicate.Group(sql.FieldNEQ(FieldL1Enabled, v))
+}
+
+// L2EnabledEQ applies the EQ predicate on the "l2_enabled" field.
+func L2EnabledEQ(v bool) predicate.Group {
+	return predicate.Group(sql.FieldEQ(FieldL2Enabled, v))
+}
+
+// L2EnabledNEQ applies the NEQ predicate on the "l2_enabled" field.
+func L2EnabledNEQ(v bool) predicate.Group {
+	return predicate.Group(sql.FieldNEQ(FieldL2Enabled, v))
+}
+
+// L3EnabledEQ applies the EQ predicate on the "l3_enabled" field.
+func L3EnabledEQ(v bool) predicate.Group {
+	return predicate.Group(sql.FieldEQ(FieldL3Enabled, v))
+}
+
+// L3EnabledNEQ applies the NEQ predicate on the "l3_enabled" field.
+func L3EnabledNEQ(v bool) predicate.Group {
+	return predicate.Group(sql.FieldNEQ(FieldL3Enabled, v))
 }
 
 // HasAPIKeys applies the HasEdge predicate on the "api_keys" edge.

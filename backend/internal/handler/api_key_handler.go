@@ -103,6 +103,30 @@ func (h *APIKeyHandler) List(c *gin.Context) {
 	response.Paginated(c, out, result.Total, page, pageSize)
 }
 
+// ListAvailableAccounts handles listing accounts available for API key binding
+// GET /api/v1/accounts
+func (h *APIKeyHandler) ListAvailableAccounts(c *gin.Context) {
+	subject, ok := middleware2.GetAuthSubjectFromContext(c)
+	if !ok {
+		response.Unauthorized(c, "User not authenticated")
+		return
+	}
+
+	accounts, err := h.apiKeyService.GetAvailableAccounts(c.Request.Context(), subject.UserID)
+	if err != nil {
+		response.ErrorFrom(c, err)
+		return
+	}
+
+	// 转换为 DTO 格式
+	out := make([]dto.Account, 0, len(accounts))
+	for i := range accounts {
+		out = append(out, *dto.AccountFromService(&accounts[i]))
+	}
+
+	response.Success(c, out)
+}
+
 // GetByID handles getting a single API key
 // GET /api/v1/api-keys/:id
 func (h *APIKeyHandler) GetByID(c *gin.Context) {

@@ -1194,6 +1194,21 @@ func (s *GatewayService) SelectAccountForModelWithExclusions(ctx context.Context
 	return s.selectAccountForModelWithPlatform(ctx, groupID, sessionHash, requestedModel, excludedIDs, platform)
 }
 
+// GetBoundAccount retrieves a specific account bound to an API key.
+// This is used when an API key is explicitly bound to a specific upstream account,
+// bypassing the normal group-based account selection.
+func (s *GatewayService) GetBoundAccount(ctx context.Context, accountID int64) (*Account, error) {
+	account, err := s.getSchedulableAccount(ctx, accountID)
+	if err != nil {
+		return nil, fmt.Errorf("get bound account %d: %w", accountID, err)
+	}
+	if !s.isAccountSchedulableForSelection(account) {
+		return nil, fmt.Errorf("%w: account %d is not schedulable (status=%s, schedulable=%t)",
+			ErrNoAvailableAccounts, accountID, account.Status, account.Schedulable)
+	}
+	return account, nil
+}
+
 // SelectAccountWithLoadAwareness selects account with load-awareness and wait plan.
 // metadataUserID: 已废弃参数，会话限制现在统一使用 sessionHash
 func (s *GatewayService) SelectAccountWithLoadAwareness(ctx context.Context, groupID *int64, sessionHash string, requestedModel string, excludedIDs map[int64]struct{}, metadataUserID string) (*AccountSelectionResult, error) {

@@ -157,6 +157,21 @@ func (Group) Fields() []ent.Field {
 			MaxLen(100).
 			Default("").
 			Comment("默认映射模型 ID，当账号级映射找不到时使用此值"),
+
+		// 安全等级配置 (added by migration 083)
+		field.String("security_level").
+			MaxLen(20).
+			Default("basic").
+			Comment("安全等级: none, basic, standard, strict"),
+		field.Bool("l1_enabled").
+			Default(true).
+			Comment("L1检测启用 (API密钥、数据库连接、私钥)"),
+		field.Bool("l2_enabled").
+			Default(false).
+			Comment("L2检测启用 (NER智能脱敏)"),
+		field.Bool("l3_enabled").
+			Default(false).
+			Comment("L3检测启用 (语义风险评估)"),
 	}
 }
 
@@ -186,5 +201,6 @@ func (Group) Indexes() []ent.Index {
 		index.Fields("is_exclusive"),
 		index.Fields("deleted_at"),
 		index.Fields("sort_order"),
+		index.Fields("security_level"),
 	}
 }

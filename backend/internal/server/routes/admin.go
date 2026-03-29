@@ -87,6 +87,9 @@ func RegisterAdminRoutes(
 
 		// 定时测试计划
 		registerScheduledTestRoutes(admin, h)
+
+		// 安全模块
+		registerSecurityRoutes(admin, h)
 	}
 }
 
@@ -565,5 +568,33 @@ func registerTLSFingerprintProfileRoutes(admin *gin.RouterGroup, h *handler.Hand
 		profiles.POST("", h.Admin.TLSFingerprintProfile.Create)
 		profiles.PUT("/:id", h.Admin.TLSFingerprintProfile.Update)
 		profiles.DELETE("/:id", h.Admin.TLSFingerprintProfile.Delete)
+	}
+}
+
+func registerSecurityRoutes(admin *gin.RouterGroup, h *handler.Handlers) {
+	security := admin.Group("/security")
+	{
+		// Security Events
+		events := security.Group("/events")
+		{
+			events.GET("", h.Admin.Security.ListSecurityEvents)
+			events.GET("/:id", h.Admin.Security.GetSecurityEvent)
+			events.PATCH("/:id", h.Admin.Security.UpdateSecurityEventStatus)
+		}
+
+		// Audit Logs
+		auditLogs := security.Group("/audit-logs")
+		{
+			auditLogs.GET("", h.Admin.Security.ListAuditLogs)
+			auditLogs.GET("/:id", h.Admin.Security.GetAuditLog)
+			auditLogs.POST("/verify", h.Admin.Security.VerifyAuditChain)
+		}
+
+		// DLP Rules
+		dlpRules := security.Group("/dlp-rules")
+		{
+			dlpRules.GET("", h.Admin.Security.ListDLPRules)
+			dlpRules.GET("/:id", h.Admin.Security.GetDLPRule)
+		}
 	}
 }

@@ -68,13 +68,14 @@
       'is-scrollable': isScrollable
     }"
   >
-    <table class="min-w-full divide-y divide-gray-200 dark:divide-dark-700">
+    <table class="min-w-full table-fixed divide-y divide-gray-200 dark:divide-dark-700">
       <thead class="table-header bg-gray-50 dark:bg-dark-800">
         <tr>
           <th
             v-for="(column, index) in columns"
             :key="column.key"
             scope="col"
+            :style="column.width ? { width: column.width, minWidth: column.width } : {}"
             :class="[
               'sticky-header-cell py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-dark-400',
               getAdaptivePaddingClass(),
@@ -166,6 +167,7 @@
             <td
               v-for="(column, colIndex) in columns"
               :key="column.key"
+              :style="column.width ? { width: column.width, minWidth: column.width } : {}"
               :class="[
                 'whitespace-nowrap py-4 text-sm text-gray-900 dark:text-gray-100',
                 getAdaptivePaddingClass(),

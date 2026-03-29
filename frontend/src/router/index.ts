@@ -374,6 +374,30 @@ const routes: RouteRecordRaw[] = [
       descriptionKey: 'admin.usage.description'
     }
   },
+  {
+    path: '/admin/security/events',
+    name: 'AdminSecurityEvents',
+    component: () => import('@/views/admin/SecurityEventsView.vue'),
+    meta: {
+      requiresAuth: true,
+      requiresAdmin: true,
+      title: 'Security Events',
+      titleKey: 'admin.security.events.title',
+      descriptionKey: 'admin.security.events.description'
+    }
+  },
+  {
+    path: '/admin/security/audit-logs',
+    name: 'AdminSecurityAuditLogs',
+    component: () => import('@/views/admin/AuditLogsView.vue'),
+    meta: {
+      requiresAuth: true,
+      requiresAdmin: true,
+      title: 'Audit Logs',
+      titleKey: 'admin.security.auditLogs.title',
+      descriptionKey: 'admin.security.auditLogs.description'
+    }
+  },
 
   // ==================== 404 Not Found ====================
   {

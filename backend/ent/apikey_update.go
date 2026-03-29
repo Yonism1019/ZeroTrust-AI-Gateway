@@ -120,6 +120,33 @@ func (_u *APIKeyUpdate) ClearGroupID() *APIKeyUpdate {
 	return _u
 }
 
+// SetAccountID sets the "account_id" field.
+func (_u *APIKeyUpdate) SetAccountID(v int64) *APIKeyUpdate {
+	_u.mutation.ResetAccountID()
+	_u.mutation.SetAccountID(v)
+	return _u
+}
+
+// SetNillableAccountID sets the "account_id" field if the given value is not nil.
+func (_u *APIKeyUpdate) SetNillableAccountID(v *int64) *APIKeyUpdate {
+	if v != nil {
+		_u.SetAccountID(*v)
+	}
+	return _u
+}
+
+// AddAccountID adds value to the "account_id" field.
+func (_u *APIKeyUpdate) AddAccountID(v int64) *APIKeyUpdate {
+	_u.mutation.AddAccountID(v)
+	return _u
+}
+
+// ClearAccountID clears the value of the "account_id" field.
+func (_u *APIKeyUpdate) ClearAccountID() *APIKeyUpdate {
+	_u.mutation.ClearAccountID()
+	return _u
+}
+
 // SetStatus sets the "status" field.
 func (_u *APIKeyUpdate) SetStatus(v string) *APIKeyUpdate {
 	_u.mutation.SetStatus(v)
@@ -593,6 +620,15 @@ func (_u *APIKeyUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(apikey.FieldName, field.TypeString, value)
 	}
+	if value, ok := _u.mutation.AccountID(); ok {
+		_spec.SetField(apikey.FieldAccountID, field.TypeInt64, value)
+	}
+	if value, ok := _u.mutation.AddedAccountID(); ok {
+		_spec.AddField(apikey.FieldAccountID, field.TypeInt64, value)
+	}
+	if _u.mutation.AccountIDCleared() {
+		_spec.ClearField(apikey.FieldAccountID, field.TypeInt64)
+	}
 	if value, ok := _u.mutation.Status(); ok {
 		_spec.SetField(apikey.FieldStatus, field.TypeString, value)
 	}
@@ -904,6 +940,33 @@ func (_u *APIKeyUpdateOne) SetNillableGroupID(v *int64) *APIKeyUpdateOne {
 // ClearGroupID clears the value of the "group_id" field.
 func (_u *APIKeyUpdateOne) ClearGroupID() *APIKeyUpdateOne {
 	_u.mutation.ClearGroupID()
+	return _u
+}
+
+// SetAccountID sets the "account_id" field.
+func (_u *APIKeyUpdateOne) SetAccountID(v int64) *APIKeyUpdateOne {
+	_u.mutation.ResetAccountID()
+	_u.mutation.SetAccountID(v)
+	return _u
+}
+
+// SetNillableAccountID sets the "account_id" field if the given value is not nil.
+func (_u *APIKeyUpdateOne) SetNillableAccountID(v *int64) *APIKeyUpdateOne {
+	if v != nil {
+		_u.SetAccountID(*v)
+	}
+	return _u
+}
+
+// AddAccountID adds value to the "account_id" field.
+func (_u *APIKeyUpdateOne) AddAccountID(v int64) *APIKeyUpdateOne {
+	_u.mutation.AddAccountID(v)
+	return _u
+}
+
+// ClearAccountID clears the value of the "account_id" field.
+func (_u *APIKeyUpdateOne) ClearAccountID() *APIKeyUpdateOne {
+	_u.mutation.ClearAccountID()
 	return _u
 }
 
@@ -1409,6 +1472,15 @@ func (_u *APIKeyUpdateOne) sqlSave(ctx context.Context) (_node *APIKey, err erro
 	}
 	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(apikey.FieldName, field.TypeString, value)
+	}
+	if value, ok := _u.mutation.AccountID(); ok {
+		_spec.SetField(apikey.FieldAccountID, field.TypeInt64, value)
+	}
+	if value, ok := _u.mutation.AddedAccountID(); ok {
+		_spec.AddField(apikey.FieldAccountID, field.TypeInt64, value)
+	}
+	if _u.mutation.AccountIDCleared() {
+		_spec.ClearField(apikey.FieldAccountID, field.TypeInt64)
 	}
 	if value, ok := _u.mutation.Status(); ok {
 		_spec.SetField(apikey.FieldStatus, field.TypeString, value)

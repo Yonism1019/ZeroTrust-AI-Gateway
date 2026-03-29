@@ -49,16 +49,16 @@ export function CTA() {
 
           {/* Description */}
           <p className="text-lg text-silver mb-10 max-w-2xl mx-auto">
-            让每一家企业都能安全地使用AI能力，无需担心数据泄露、影子AI、成本失控等问题
+            让企业安全放心使用AI能力，无需担心数据泄露、影子AI、成本失控等问题
           </p>
 
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <GlowButton size="lg">
+            <GlowButton size="lg" onClick={() => window.open('http://zeroai.yonism.cn/', '_blank')}>
               立即体验
               <ArrowRight className="w-5 h-5 ml-2" />
             </GlowButton>
-            <GlowButton variant="secondary" size="lg">
+            <GlowButton variant="secondary" size="lg" onClick={() => window.location.href = 'mailto:990908@leapmotor.com'}>
               联系我们
             </GlowButton>
           </div>
@@ -67,15 +67,15 @@ export function CTA() {
           <div className="mt-12 flex flex-wrap justify-center gap-6 text-silver text-sm">
             <div className="flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-safe-green" />
-              <span>免费试用</span>
+              <span>支持嵌入AI Works</span>
             </div>
             <div className="flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-safe-green" />
-              <span>无需信用卡</span>
+              <span>快速接入</span>
             </div>
             <div className="flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-safe-green" />
-              <span>30分钟快速接入</span>
+              <span>30分钟部署</span>
             </div>
           </div>
         </ScrollReveal>

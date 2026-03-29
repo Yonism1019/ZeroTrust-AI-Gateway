@@ -79,6 +79,14 @@ const (
 	FieldAllowMessagesDispatch = "allow_messages_dispatch"
 	// FieldDefaultMappedModel holds the string denoting the default_mapped_model field in the database.
 	FieldDefaultMappedModel = "default_mapped_model"
+	// FieldSecurityLevel holds the string denoting the security_level field in the database.
+	FieldSecurityLevel = "security_level"
+	// FieldL1Enabled holds the string denoting the l1_enabled field in the database.
+	FieldL1Enabled = "l1_enabled"
+	// FieldL2Enabled holds the string denoting the l2_enabled field in the database.
+	FieldL2Enabled = "l2_enabled"
+	// FieldL3Enabled holds the string denoting the l3_enabled field in the database.
+	FieldL3Enabled = "l3_enabled"
 	// EdgeAPIKeys holds the string denoting the api_keys edge name in mutations.
 	EdgeAPIKeys = "api_keys"
 	// EdgeRedeemCodes holds the string denoting the redeem_codes edge name in mutations.
@@ -186,6 +194,10 @@ var Columns = []string{
 	FieldSortOrder,
 	FieldAllowMessagesDispatch,
 	FieldDefaultMappedModel,
+	FieldSecurityLevel,
+	FieldL1Enabled,
+	FieldL2Enabled,
+	FieldL3Enabled,
 }
 
 var (
@@ -259,6 +271,16 @@ var (
 	DefaultDefaultMappedModel string
 	// DefaultMappedModelValidator is a validator for the "default_mapped_model" field. It is called by the builders before save.
 	DefaultMappedModelValidator func(string) error
+	// DefaultSecurityLevel holds the default value on creation for the "security_level" field.
+	DefaultSecurityLevel string
+	// SecurityLevelValidator is a validator for the "security_level" field. It is called by the builders before save.
+	SecurityLevelValidator func(string) error
+	// DefaultL1Enabled holds the default value on creation for the "l1_enabled" field.
+	DefaultL1Enabled bool
+	// DefaultL2Enabled holds the default value on creation for the "l2_enabled" field.
+	DefaultL2Enabled bool
+	// DefaultL3Enabled holds the default value on creation for the "l3_enabled" field.
+	DefaultL3Enabled bool
 )
 
 // OrderOption defines the ordering options for the Group queries.
@@ -417,6 +439,26 @@ func ByAllowMessagesDispatch(opts ...sql.OrderTermOption) OrderOption {
 // ByDefaultMappedModel orders the results by the default_mapped_model field.
 func ByDefaultMappedModel(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDefaultMappedModel, opts...).ToFunc()
+}
+
+// BySecurityLevel orders the results by the security_level field.
+func BySecurityLevel(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSecurityLevel, opts...).ToFunc()
+}
+
+// ByL1Enabled orders the results by the l1_enabled field.
+func ByL1Enabled(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldL1Enabled, opts...).ToFunc()
+}
+
+// ByL2Enabled orders the results by the l2_enabled field.
+func ByL2Enabled(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldL2Enabled, opts...).ToFunc()
+}
+
+// ByL3Enabled orders the results by the l3_enabled field.
+func ByL3Enabled(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldL3Enabled, opts...).ToFunc()
 }
 
 // ByAPIKeysCount orders the results by api_keys count.

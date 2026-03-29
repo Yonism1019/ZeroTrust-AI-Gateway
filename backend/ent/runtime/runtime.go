@@ -10,6 +10,8 @@ import (
 	"github.com/Wei-Shaw/sub2api/ent/announcement"
 	"github.com/Wei-Shaw/sub2api/ent/announcementread"
 	"github.com/Wei-Shaw/sub2api/ent/apikey"
+	"github.com/Wei-Shaw/sub2api/ent/auditlog"
+	"github.com/Wei-Shaw/sub2api/ent/dlprule"
 	"github.com/Wei-Shaw/sub2api/ent/errorpassthroughrule"
 	"github.com/Wei-Shaw/sub2api/ent/group"
 	"github.com/Wei-Shaw/sub2api/ent/idempotencyrecord"
@@ -18,6 +20,7 @@ import (
 	"github.com/Wei-Shaw/sub2api/ent/proxy"
 	"github.com/Wei-Shaw/sub2api/ent/redeemcode"
 	"github.com/Wei-Shaw/sub2api/ent/schema"
+	"github.com/Wei-Shaw/sub2api/ent/securityevent"
 	"github.com/Wei-Shaw/sub2api/ent/securitysecret"
 	"github.com/Wei-Shaw/sub2api/ent/setting"
 	"github.com/Wei-Shaw/sub2api/ent/tlsfingerprintprofile"
@@ -90,41 +93,41 @@ func init() {
 		}
 	}()
 	// apikeyDescStatus is the schema descriptor for status field.
-	apikeyDescStatus := apikeyFields[4].Descriptor()
+	apikeyDescStatus := apikeyFields[5].Descriptor()
 	// apikey.DefaultStatus holds the default value on creation for the status field.
 	apikey.DefaultStatus = apikeyDescStatus.Default.(string)
 	// apikey.StatusValidator is a validator for the "status" field. It is called by the builders before save.
 	apikey.StatusValidator = apikeyDescStatus.Validators[0].(func(string) error)
 	// apikeyDescQuota is the schema descriptor for quota field.
-	apikeyDescQuota := apikeyFields[8].Descriptor()
+	apikeyDescQuota := apikeyFields[9].Descriptor()
 	// apikey.DefaultQuota holds the default value on creation for the quota field.
 	apikey.DefaultQuota = apikeyDescQuota.Default.(float64)
 	// apikeyDescQuotaUsed is the schema descriptor for quota_used field.
-	apikeyDescQuotaUsed := apikeyFields[9].Descriptor()
+	apikeyDescQuotaUsed := apikeyFields[10].Descriptor()
 	// apikey.DefaultQuotaUsed holds the default value on creation for the quota_used field.
 	apikey.DefaultQuotaUsed = apikeyDescQuotaUsed.Default.(float64)
 	// apikeyDescRateLimit5h is the schema descriptor for rate_limit_5h field.
-	apikeyDescRateLimit5h := apikeyFields[11].Descriptor()
+	apikeyDescRateLimit5h := apikeyFields[12].Descriptor()
 	// apikey.DefaultRateLimit5h holds the default value on creation for the rate_limit_5h field.
 	apikey.DefaultRateLimit5h = apikeyDescRateLimit5h.Default.(float64)
 	// apikeyDescRateLimit1d is the schema descriptor for rate_limit_1d field.
-	apikeyDescRateLimit1d := apikeyFields[12].Descriptor()
+	apikeyDescRateLimit1d := apikeyFields[13].Descriptor()
 	// apikey.DefaultRateLimit1d holds the default value on creation for the rate_limit_1d field.
 	apikey.DefaultRateLimit1d = apikeyDescRateLimit1d.Default.(float64)
 	// apikeyDescRateLimit7d is the schema descriptor for rate_limit_7d field.
-	apikeyDescRateLimit7d := apikeyFields[13].Descriptor()
+	apikeyDescRateLimit7d := apikeyFields[14].Descriptor()
 	// apikey.DefaultRateLimit7d holds the default value on creation for the rate_limit_7d field.
 	apikey.DefaultRateLimit7d = apikeyDescRateLimit7d.Default.(float64)
 	// apikeyDescUsage5h is the schema descriptor for usage_5h field.
-	apikeyDescUsage5h := apikeyFields[14].Descriptor()
+	apikeyDescUsage5h := apikeyFields[15].Descriptor()
 	// apikey.DefaultUsage5h holds the default value on creation for the usage_5h field.
 	apikey.DefaultUsage5h = apikeyDescUsage5h.Default.(float64)
 	// apikeyDescUsage1d is the schema descriptor for usage_1d field.
-	apikeyDescUsage1d := apikeyFields[15].Descriptor()
+	apikeyDescUsage1d := apikeyFields[16].Descriptor()
 	// apikey.DefaultUsage1d holds the default value on creation for the usage_1d field.
 	apikey.DefaultUsage1d = apikeyDescUsage1d.Default.(float64)
 	// apikeyDescUsage7d is the schema descriptor for usage_7d field.
-	apikeyDescUsage7d := apikeyFields[16].Descriptor()
+	apikeyDescUsage7d := apikeyFields[17].Descriptor()
 	// apikey.DefaultUsage7d holds the default value on creation for the usage_7d field.
 	apikey.DefaultUsage7d = apikeyDescUsage7d.Default.(float64)
 	accountMixin := schema.Account{}.Mixin()
@@ -304,6 +307,186 @@ func init() {
 	announcementreadDescCreatedAt := announcementreadFields[3].Descriptor()
 	// announcementread.DefaultCreatedAt holds the default value on creation for the created_at field.
 	announcementread.DefaultCreatedAt = announcementreadDescCreatedAt.Default.(func() time.Time)
+	auditlogFields := schema.AuditLog{}.Fields()
+	_ = auditlogFields
+	// auditlogDescAction is the schema descriptor for action field.
+	auditlogDescAction := auditlogFields[2].Descriptor()
+	// auditlog.ActionValidator is a validator for the "action" field. It is called by the builders before save.
+	auditlog.ActionValidator = func() func(string) error {
+		validators := auditlogDescAction.Validators
+		fns := [...]func(string) error{
+			validators[0].(func(string) error),
+			validators[1].(func(string) error),
+		}
+		return func(action string) error {
+			for _, fn := range fns {
+				if err := fn(action); err != nil {
+					return err
+				}
+			}
+			return nil
+		}
+	}()
+	// auditlogDescResourceType is the schema descriptor for resource_type field.
+	auditlogDescResourceType := auditlogFields[3].Descriptor()
+	// auditlog.ResourceTypeValidator is a validator for the "resource_type" field. It is called by the builders before save.
+	auditlog.ResourceTypeValidator = func() func(string) error {
+		validators := auditlogDescResourceType.Validators
+		fns := [...]func(string) error{
+			validators[0].(func(string) error),
+			validators[1].(func(string) error),
+		}
+		return func(resource_type string) error {
+			for _, fn := range fns {
+				if err := fn(resource_type); err != nil {
+					return err
+				}
+			}
+			return nil
+		}
+	}()
+	// auditlogDescResourceID is the schema descriptor for resource_id field.
+	auditlogDescResourceID := auditlogFields[4].Descriptor()
+	// auditlog.ResourceIDValidator is a validator for the "resource_id" field. It is called by the builders before save.
+	auditlog.ResourceIDValidator = auditlogDescResourceID.Validators[0].(func(string) error)
+	// auditlogDescActorIP is the schema descriptor for actor_ip field.
+	auditlogDescActorIP := auditlogFields[5].Descriptor()
+	// auditlog.ActorIPValidator is a validator for the "actor_ip" field. It is called by the builders before save.
+	auditlog.ActorIPValidator = auditlogDescActorIP.Validators[0].(func(string) error)
+	// auditlogDescActorUserAgent is the schema descriptor for actor_user_agent field.
+	auditlogDescActorUserAgent := auditlogFields[6].Descriptor()
+	// auditlog.ActorUserAgentValidator is a validator for the "actor_user_agent" field. It is called by the builders before save.
+	auditlog.ActorUserAgentValidator = auditlogDescActorUserAgent.Validators[0].(func(string) error)
+	// auditlogDescRequestID is the schema descriptor for request_id field.
+	auditlogDescRequestID := auditlogFields[7].Descriptor()
+	// auditlog.RequestIDValidator is a validator for the "request_id" field. It is called by the builders before save.
+	auditlog.RequestIDValidator = auditlogDescRequestID.Validators[0].(func(string) error)
+	// auditlogDescSessionID is the schema descriptor for session_id field.
+	auditlogDescSessionID := auditlogFields[8].Descriptor()
+	// auditlog.SessionIDValidator is a validator for the "session_id" field. It is called by the builders before save.
+	auditlog.SessionIDValidator = auditlogDescSessionID.Validators[0].(func(string) error)
+	// auditlogDescResult is the schema descriptor for result field.
+	auditlogDescResult := auditlogFields[10].Descriptor()
+	// auditlog.DefaultResult holds the default value on creation for the result field.
+	auditlog.DefaultResult = auditlogDescResult.Default.(string)
+	// auditlog.ResultValidator is a validator for the "result" field. It is called by the builders before save.
+	auditlog.ResultValidator = auditlogDescResult.Validators[0].(func(string) error)
+	// auditlogDescFailureReason is the schema descriptor for failure_reason field.
+	auditlogDescFailureReason := auditlogFields[11].Descriptor()
+	// auditlog.FailureReasonValidator is a validator for the "failure_reason" field. It is called by the builders before save.
+	auditlog.FailureReasonValidator = auditlogDescFailureReason.Validators[0].(func(string) error)
+	// auditlogDescPreviousHash is the schema descriptor for previous_hash field.
+	auditlogDescPreviousHash := auditlogFields[12].Descriptor()
+	// auditlog.PreviousHashValidator is a validator for the "previous_hash" field. It is called by the builders before save.
+	auditlog.PreviousHashValidator = auditlogDescPreviousHash.Validators[0].(func(string) error)
+	// auditlogDescRecordHash is the schema descriptor for record_hash field.
+	auditlogDescRecordHash := auditlogFields[13].Descriptor()
+	// auditlog.RecordHashValidator is a validator for the "record_hash" field. It is called by the builders before save.
+	auditlog.RecordHashValidator = func() func(string) error {
+		validators := auditlogDescRecordHash.Validators
+		fns := [...]func(string) error{
+			validators[0].(func(string) error),
+			validators[1].(func(string) error),
+		}
+		return func(record_hash string) error {
+			for _, fn := range fns {
+				if err := fn(record_hash); err != nil {
+					return err
+				}
+			}
+			return nil
+		}
+	}()
+	// auditlogDescCreatedAt is the schema descriptor for created_at field.
+	auditlogDescCreatedAt := auditlogFields[14].Descriptor()
+	// auditlog.DefaultCreatedAt holds the default value on creation for the created_at field.
+	auditlog.DefaultCreatedAt = auditlogDescCreatedAt.Default.(func() time.Time)
+	dlpruleFields := schema.DLPRule{}.Fields()
+	_ = dlpruleFields
+	// dlpruleDescName is the schema descriptor for name field.
+	dlpruleDescName := dlpruleFields[0].Descriptor()
+	// dlprule.NameValidator is a validator for the "name" field. It is called by the builders before save.
+	dlprule.NameValidator = func() func(string) error {
+		validators := dlpruleDescName.Validators
+		fns := [...]func(string) error{
+			validators[0].(func(string) error),
+			validators[1].(func(string) error),
+		}
+		return func(name string) error {
+			for _, fn := range fns {
+				if err := fn(name); err != nil {
+					return err
+				}
+			}
+			return nil
+		}
+	}()
+	// dlpruleDescCategory is the schema descriptor for category field.
+	dlpruleDescCategory := dlpruleFields[2].Descriptor()
+	// dlprule.CategoryValidator is a validator for the "category" field. It is called by the builders before save.
+	dlprule.CategoryValidator = func() func(string) error {
+		validators := dlpruleDescCategory.Validators
+		fns := [...]func(string) error{
+			validators[0].(func(string) error),
+			validators[1].(func(string) error),
+		}
+		return func(category string) error {
+			for _, fn := range fns {
+				if err := fn(category); err != nil {
+					return err
+				}
+			}
+			return nil
+		}
+	}()
+	// dlpruleDescPattern is the schema descriptor for pattern field.
+	dlpruleDescPattern := dlpruleFields[3].Descriptor()
+	// dlprule.PatternValidator is a validator for the "pattern" field. It is called by the builders before save.
+	dlprule.PatternValidator = dlpruleDescPattern.Validators[0].(func(string) error)
+	// dlpruleDescPatternType is the schema descriptor for pattern_type field.
+	dlpruleDescPatternType := dlpruleFields[4].Descriptor()
+	// dlprule.DefaultPatternType holds the default value on creation for the pattern_type field.
+	dlprule.DefaultPatternType = dlpruleDescPatternType.Default.(string)
+	// dlprule.PatternTypeValidator is a validator for the "pattern_type" field. It is called by the builders before save.
+	dlprule.PatternTypeValidator = dlpruleDescPatternType.Validators[0].(func(string) error)
+	// dlpruleDescSeverity is the schema descriptor for severity field.
+	dlpruleDescSeverity := dlpruleFields[5].Descriptor()
+	// dlprule.DefaultSeverity holds the default value on creation for the severity field.
+	dlprule.DefaultSeverity = dlpruleDescSeverity.Default.(string)
+	// dlprule.SeverityValidator is a validator for the "severity" field. It is called by the builders before save.
+	dlprule.SeverityValidator = dlpruleDescSeverity.Validators[0].(func(string) error)
+	// dlpruleDescAction is the schema descriptor for action field.
+	dlpruleDescAction := dlpruleFields[6].Descriptor()
+	// dlprule.DefaultAction holds the default value on creation for the action field.
+	dlprule.DefaultAction = dlpruleDescAction.Default.(string)
+	// dlprule.ActionValidator is a validator for the "action" field. It is called by the builders before save.
+	dlprule.ActionValidator = dlpruleDescAction.Validators[0].(func(string) error)
+	// dlpruleDescMaskContent is the schema descriptor for mask_content field.
+	dlpruleDescMaskContent := dlpruleFields[7].Descriptor()
+	// dlprule.DefaultMaskContent holds the default value on creation for the mask_content field.
+	dlprule.DefaultMaskContent = dlpruleDescMaskContent.Default.(bool)
+	// dlpruleDescEnabled is the schema descriptor for enabled field.
+	dlpruleDescEnabled := dlpruleFields[8].Descriptor()
+	// dlprule.DefaultEnabled holds the default value on creation for the enabled field.
+	dlprule.DefaultEnabled = dlpruleDescEnabled.Default.(bool)
+	// dlpruleDescPriority is the schema descriptor for priority field.
+	dlpruleDescPriority := dlpruleFields[9].Descriptor()
+	// dlprule.DefaultPriority holds the default value on creation for the priority field.
+	dlprule.DefaultPriority = dlpruleDescPriority.Default.(int)
+	// dlpruleDescScope is the schema descriptor for scope field.
+	dlpruleDescScope := dlpruleFields[10].Descriptor()
+	// dlprule.DefaultScope holds the default value on creation for the scope field.
+	dlprule.DefaultScope = dlpruleDescScope.Default.(string)
+	// dlprule.ScopeValidator is a validator for the "scope" field. It is called by the builders before save.
+	dlprule.ScopeValidator = dlpruleDescScope.Validators[0].(func(string) error)
+	// dlpruleDescCreatedAt is the schema descriptor for created_at field.
+	dlpruleDescCreatedAt := dlpruleFields[14].Descriptor()
+	// dlprule.DefaultCreatedAt holds the default value on creation for the created_at field.
+	dlprule.DefaultCreatedAt = dlpruleDescCreatedAt.Default.(func() time.Time)
+	// dlpruleDescUpdatedAt is the schema descriptor for updated_at field.
+	dlpruleDescUpdatedAt := dlpruleFields[15].Descriptor()
+	// dlprule.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	dlprule.DefaultUpdatedAt = dlpruleDescUpdatedAt.Default.(func() time.Time)
 	errorpassthroughruleMixin := schema.ErrorPassthroughRule{}.Mixin()
 	errorpassthroughruleMixinFields0 := errorpassthroughruleMixin[0].Fields()
 	_ = errorpassthroughruleMixinFields0
@@ -464,6 +647,24 @@ func init() {
 	group.DefaultDefaultMappedModel = groupDescDefaultMappedModel.Default.(string)
 	// group.DefaultMappedModelValidator is a validator for the "default_mapped_model" field. It is called by the builders before save.
 	group.DefaultMappedModelValidator = groupDescDefaultMappedModel.Validators[0].(func(string) error)
+	// groupDescSecurityLevel is the schema descriptor for security_level field.
+	groupDescSecurityLevel := groupFields[29].Descriptor()
+	// group.DefaultSecurityLevel holds the default value on creation for the security_level field.
+	group.DefaultSecurityLevel = groupDescSecurityLevel.Default.(string)
+	// group.SecurityLevelValidator is a validator for the "security_level" field. It is called by the builders before save.
+	group.SecurityLevelValidator = groupDescSecurityLevel.Validators[0].(func(string) error)
+	// groupDescL1Enabled is the schema descriptor for l1_enabled field.
+	groupDescL1Enabled := groupFields[30].Descriptor()
+	// group.DefaultL1Enabled holds the default value on creation for the l1_enabled field.
+	group.DefaultL1Enabled = groupDescL1Enabled.Default.(bool)
+	// groupDescL2Enabled is the schema descriptor for l2_enabled field.
+	groupDescL2Enabled := groupFields[31].Descriptor()
+	// group.DefaultL2Enabled holds the default value on creation for the l2_enabled field.
+	group.DefaultL2Enabled = groupDescL2Enabled.Default.(bool)
+	// groupDescL3Enabled is the schema descriptor for l3_enabled field.
+	groupDescL3Enabled := groupFields[32].Descriptor()
+	// group.DefaultL3Enabled holds the default value on creation for the l3_enabled field.
+	group.DefaultL3Enabled = groupDescL3Enabled.Default.(bool)
 	idempotencyrecordMixin := schema.IdempotencyRecord{}.Mixin()
 	idempotencyrecordMixinFields0 := idempotencyrecordMixin[0].Fields()
 	_ = idempotencyrecordMixinFields0
@@ -684,6 +885,116 @@ func init() {
 	redeemcodeDescValidityDays := redeemcodeFields[9].Descriptor()
 	// redeemcode.DefaultValidityDays holds the default value on creation for the validity_days field.
 	redeemcode.DefaultValidityDays = redeemcodeDescValidityDays.Default.(int)
+	securityeventFields := schema.SecurityEvent{}.Fields()
+	_ = securityeventFields
+	// securityeventDescEventType is the schema descriptor for event_type field.
+	securityeventDescEventType := securityeventFields[0].Descriptor()
+	// securityevent.EventTypeValidator is a validator for the "event_type" field. It is called by the builders before save.
+	securityevent.EventTypeValidator = func() func(string) error {
+		validators := securityeventDescEventType.Validators
+		fns := [...]func(string) error{
+			validators[0].(func(string) error),
+			validators[1].(func(string) error),
+		}
+		return func(event_type string) error {
+			for _, fn := range fns {
+				if err := fn(event_type); err != nil {
+					return err
+				}
+			}
+			return nil
+		}
+	}()
+	// securityeventDescSeverity is the schema descriptor for severity field.
+	securityeventDescSeverity := securityeventFields[1].Descriptor()
+	// securityevent.SeverityValidator is a validator for the "severity" field. It is called by the builders before save.
+	securityevent.SeverityValidator = func() func(string) error {
+		validators := securityeventDescSeverity.Validators
+		fns := [...]func(string) error{
+			validators[0].(func(string) error),
+			validators[1].(func(string) error),
+		}
+		return func(severity string) error {
+			for _, fn := range fns {
+				if err := fn(severity); err != nil {
+					return err
+				}
+			}
+			return nil
+		}
+	}()
+	// securityeventDescCategory is the schema descriptor for category field.
+	securityeventDescCategory := securityeventFields[2].Descriptor()
+	// securityevent.CategoryValidator is a validator for the "category" field. It is called by the builders before save.
+	securityevent.CategoryValidator = func() func(string) error {
+		validators := securityeventDescCategory.Validators
+		fns := [...]func(string) error{
+			validators[0].(func(string) error),
+			validators[1].(func(string) error),
+		}
+		return func(category string) error {
+			for _, fn := range fns {
+				if err := fn(category); err != nil {
+					return err
+				}
+			}
+			return nil
+		}
+	}()
+	// securityeventDescTitle is the schema descriptor for title field.
+	securityeventDescTitle := securityeventFields[3].Descriptor()
+	// securityevent.TitleValidator is a validator for the "title" field. It is called by the builders before save.
+	securityevent.TitleValidator = func() func(string) error {
+		validators := securityeventDescTitle.Validators
+		fns := [...]func(string) error{
+			validators[0].(func(string) error),
+			validators[1].(func(string) error),
+		}
+		return func(title string) error {
+			for _, fn := range fns {
+				if err := fn(title); err != nil {
+					return err
+				}
+			}
+			return nil
+		}
+	}()
+	// securityeventDescRequestID is the schema descriptor for request_id field.
+	securityeventDescRequestID := securityeventFields[7].Descriptor()
+	// securityevent.RequestIDValidator is a validator for the "request_id" field. It is called by the builders before save.
+	securityevent.RequestIDValidator = securityeventDescRequestID.Validators[0].(func(string) error)
+	// securityeventDescModel is the schema descriptor for model field.
+	securityeventDescModel := securityeventFields[8].Descriptor()
+	// securityevent.ModelValidator is a validator for the "model" field. It is called by the builders before save.
+	securityevent.ModelValidator = securityeventDescModel.Validators[0].(func(string) error)
+	// securityeventDescAction is the schema descriptor for action field.
+	securityeventDescAction := securityeventFields[9].Descriptor()
+	// securityevent.DefaultAction holds the default value on creation for the action field.
+	securityevent.DefaultAction = securityeventDescAction.Default.(string)
+	// securityevent.ActionValidator is a validator for the "action" field. It is called by the builders before save.
+	securityevent.ActionValidator = securityeventDescAction.Validators[0].(func(string) error)
+	// securityeventDescConfidence is the schema descriptor for confidence field.
+	securityeventDescConfidence := securityeventFields[11].Descriptor()
+	// securityevent.DefaultConfidence holds the default value on creation for the confidence field.
+	securityevent.DefaultConfidence = securityeventDescConfidence.Default.(float64)
+	// securityeventDescSourceIP is the schema descriptor for source_ip field.
+	securityeventDescSourceIP := securityeventFields[13].Descriptor()
+	// securityevent.SourceIPValidator is a validator for the "source_ip" field. It is called by the builders before save.
+	securityevent.SourceIPValidator = securityeventDescSourceIP.Validators[0].(func(string) error)
+	// securityeventDescUserAgent is the schema descriptor for user_agent field.
+	securityeventDescUserAgent := securityeventFields[14].Descriptor()
+	// securityevent.UserAgentValidator is a validator for the "user_agent" field. It is called by the builders before save.
+	securityevent.UserAgentValidator = securityeventDescUserAgent.Validators[0].(func(string) error)
+	// securityeventDescStatus is the schema descriptor for status field.
+	securityeventDescStatus := securityeventFields[15].Descriptor()
+	// securityevent.DefaultStatus holds the default value on creation for the status field.
+	securityevent.DefaultStatus = securityeventDescStatus.Default.(string)
+	// securityevent.StatusValidator is a validator for the "status" field. It is called by the builders before save.
+	securityevent.StatusValidator = securityeventDescStatus.Validators[0].(func(string) error)
+	// securityeventDescCreatedAt is the schema descriptor for created_at field.
+	securityeventDescCreatedAt := securityeventFields[17].Descriptor()
+	// securityevent.DefaultCreatedAt holds the default value on creation for the created_at field.
+	securityevent.DefaultCreatedAt = securityeventDescCreatedAt.Default.(func() time.Time)
 	securitysecretMixin := schema.SecuritySecret{}.Mixin()
 	securitysecretMixinFields0 := securitysecretMixin[0].Fields()
 	_ = securitysecretMixinFields0

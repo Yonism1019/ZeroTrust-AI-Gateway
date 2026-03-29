@@ -352,7 +352,9 @@ export default {
     mySubscriptions: '我的订阅',
     buySubscription: '充值/订阅',
     docs: '文档',
-    sora: 'Sora 创作'
+    sora: 'Sora 创作',
+    securityEvents: '安全事件',
+    auditLogs: '审计日志'
   },
 
   // Auth
@@ -585,6 +587,11 @@ export default {
     selectGroup: '选择分组',
     statusLabel: '状态',
     selectStatus: '选择状态',
+    accountLabel: '上游账户',
+    selectAccount: '选择上游账户',
+    searchAccount: '搜索账户...',
+    noAccountsAvailable: '暂无可用账户',
+    accountHint: '绑定后将直接使用该账户，不再自动调度',
     saving: '保存中...',
     noKeysYet: '暂无 API 密钥',
     createFirstKey: '创建您的第一个 API 密钥以开始使用 API。',
@@ -1817,6 +1824,26 @@ export default {
         geminiText: 'Gemini Text',
         geminiImage: 'Gemini Image',
         hint: '至少选择一个模型系列'
+      },
+      security: {
+        title: '安全等级配置',
+        tooltip: '配置分组的安全检测级别。L1=快速检测（<1ms），L2=智能脱敏（<50ms），L3=语义分析（<100ms）',
+        level: '安全等级',
+        levels: {
+          none: '关闭',
+          basic: '基础',
+          standard: '标准',
+          strict: '严格'
+        },
+        l1: 'L1 检测',
+        l1Desc: 'API密钥、数据库连接、私钥检测',
+        l1Enabled: '启用 L1 检测',
+        l2: 'L2 检测',
+        l2Desc: 'NER智能脱敏（PII识别）',
+        l2Enabled: '启用 L2 检测',
+        l3: 'L3 检测',
+        l3Desc: '语义风险评估',
+        l3Enabled: '启用 L3 检测'
       }
     },
 
@@ -3466,6 +3493,95 @@ export default {
           failed: '失败',
           canceled: '已取消'
         }
+      }
+    },
+
+    // Security
+    security: {
+      events: {
+        title: '安全事件',
+        description: '查看和管理安全风险事件',
+        failedToLoad: '加载安全事件失败',
+        severity: '严重程度',
+        status: '状态',
+        category: '类别',
+        allSeverities: '全部严重程度',
+        allStatuses: '全部状态',
+        allCategories: '全部类别',
+        eventDetail: '事件详情',
+        eventType: '事件类型',
+        action: '操作',
+        confidence: '置信度',
+        sourceIp: '源IP',
+        userAgent: 'User Agent',
+        matchedPatterns: '匹配规则',
+        requestSnapshot: '请求快照',
+        resolution: '解决方案',
+        resolve: '解决',
+        resolveEvent: '处理事件',
+        resolvedAt: '解决时间',
+        // 严重程度选项
+        severityCritical: '严重',
+        severityHigh: '高',
+        severityMedium: '中',
+        severityLow: '低',
+        severityInfo: '信息',
+        // 状态选项
+        statusNew: '新事件',
+        statusInvestigating: '调查中',
+        statusResolved: '已解决',
+        statusFalsePositive: '误报',
+        // 类别选项
+        categorySensitiveData: '敏感数据',
+        categoryShadowAI: 'Shadow AI',
+        categoryDangerousInstruction: '危险指令',
+        categoryCostAnomaly: '费用异常'
+      },
+      auditLogs: {
+        title: '审计日志',
+        description: '查看系统操作审计日志',
+        failedToLoad: '加载审计日志失败',
+        id: 'ID',
+        action: '操作类型',
+        result: '结果',
+        resourceType: '资源类型',
+        allActions: '全部操作',
+        allResults: '全部结果',
+        logDetail: '日志详情',
+        resourceId: '资源ID',
+        userId: '用户ID',
+        apiKeyId: 'API密钥ID',
+        actor: '操作者',
+        actorIp: '操作者IP',
+        sessionId: '会话ID',
+        requestId: '请求ID',
+        changes: '变更内容',
+        createdAt: '创建时间',
+        failureReason: '失败原因',
+        recordHash: '记录哈希',
+        previousHash: '前一条哈希',
+        verifyChain: '验证链完整性',
+        verifyChainDescription: '验证指定范围内日志记录的哈希链完整性',
+        fromId: '起始ID',
+        toId: '结束ID',
+        fromIdPlaceholder: '请输入起始ID',
+        toIdPlaceholder: '请输入结束ID',
+        verify: '验证',
+        verifyResult: '验证结果',
+        chainValid: '哈希链完整有效',
+        chainInvalid: '哈希链已被篡改',
+        // 操作类型选项
+        actionCreate: '创建',
+        actionRead: '读取',
+        actionUpdate: '更新',
+        actionDelete: '删除',
+        actionExecute: '执行',
+        actionLogin: '登录',
+        actionLogout: '登出',
+        // 结果选项
+        resultSuccess: '成功',
+        resultFailure: '失败',
+        resultPartial: '部分成功'
       }
     },
 

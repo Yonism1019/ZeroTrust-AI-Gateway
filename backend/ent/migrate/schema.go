@@ -17,6 +17,7 @@ var (
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true, SchemaType: map[string]string{"postgres": "timestamptz"}},
 		{Name: "key", Type: field.TypeString, Unique: true, Size: 128},
 		{Name: "name", Type: field.TypeString, Size: 100},
+		{Name: "account_id", Type: field.TypeInt64, Nullable: true},
 		{Name: "status", Type: field.TypeString, Size: 20, Default: "active"},
 		{Name: "last_used_at", Type: field.TypeTime, Nullable: true},
 		{Name: "ip_whitelist", Type: field.TypeJSON, Nullable: true},
@@ -44,13 +45,13 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "api_keys_groups_api_keys",
-				Columns:    []*schema.Column{APIKeysColumns[22]},
+				Columns:    []*schema.Column{APIKeysColumns[23]},
 				RefColumns: []*schema.Column{GroupsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "api_keys_users_api_keys",
-				Columns:    []*schema.Column{APIKeysColumns[23]},
+				Columns:    []*schema.Column{APIKeysColumns[24]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
@@ -59,17 +60,22 @@ var (
 			{
 				Name:    "apikey_user_id",
 				Unique:  false,
-				Columns: []*schema.Column{APIKeysColumns[23]},
+				Columns: []*schema.Column{APIKeysColumns[24]},
 			},
 			{
 				Name:    "apikey_group_id",
 				Unique:  false,
-				Columns: []*schema.Column{APIKeysColumns[22]},
+				Columns: []*schema.Column{APIKeysColumns[23]},
+			},
+			{
+				Name:    "apikey_account_id",
+				Unique:  false,
+				Columns: []*schema.Column{APIKeysColumns[6]},
 			},
 			{
 				Name:    "apikey_status",
 				Unique:  false,
-				Columns: []*schema.Column{APIKeysColumns[6]},
+				Columns: []*schema.Column{APIKeysColumns[7]},
 			},
 			{
 				Name:    "apikey_deleted_at",
@@ -79,17 +85,17 @@ var (
 			{
 				Name:    "apikey_last_used_at",
 				Unique:  false,
-				Columns: []*schema.Column{APIKeysColumns[7]},
+				Columns: []*schema.Column{APIKeysColumns[8]},
 			},
 			{
 				Name:    "apikey_quota_quota_used",
 				Unique:  false,
-				Columns: []*schema.Column{APIKeysColumns[10], APIKeysColumns[11]},
+				Columns: []*schema.Column{APIKeysColumns[11], APIKeysColumns[12]},
 			},
 			{
 				Name:    "apikey_expires_at",
 				Unique:  false,
-				Columns: []*schema.Column{APIKeysColumns[12]},
+				Columns: []*schema.Column{APIKeysColumns[13]},
 			},
 		},
 	}
@@ -338,6 +344,136 @@ var (
 			},
 		},
 	}
+	// AuditLogsColumns holds the columns for the "audit_logs" table.
+	AuditLogsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt64, Increment: true},
+		{Name: "user_id", Type: field.TypeInt64, Nullable: true},
+		{Name: "api_key_id", Type: field.TypeInt64, Nullable: true},
+		{Name: "action", Type: field.TypeString, Size: 50},
+		{Name: "resource_type", Type: field.TypeString, Size: 50},
+		{Name: "resource_id", Type: field.TypeString, Nullable: true, Size: 64},
+		{Name: "actor_ip", Type: field.TypeString, Nullable: true, Size: 45},
+		{Name: "actor_user_agent", Type: field.TypeString, Nullable: true, Size: 512},
+		{Name: "request_id", Type: field.TypeString, Nullable: true, Size: 64},
+		{Name: "session_id", Type: field.TypeString, Nullable: true, Size: 64},
+		{Name: "changes", Type: field.TypeString, Nullable: true, SchemaType: map[string]string{"postgres": "jsonb"}},
+		{Name: "result", Type: field.TypeString, Size: 20, Default: "success"},
+		{Name: "failure_reason", Type: field.TypeString, Nullable: true, Size: 255},
+		{Name: "previous_hash", Type: field.TypeString, Nullable: true, Size: 64},
+		{Name: "record_hash", Type: field.TypeString, Size: 64},
+		{Name: "created_at", Type: field.TypeTime, SchemaType: map[string]string{"postgres": "timestamptz"}},
+	}
+	// AuditLogsTable holds the schema information for the "audit_logs" table.
+	AuditLogsTable = &schema.Table{
+		Name:       "audit_logs",
+		Columns:    AuditLogsColumns,
+		PrimaryKey: []*schema.Column{AuditLogsColumns[0]},
+		Indexes: []*schema.Index{
+			{
+				Name:    "auditlog_action",
+				Unique:  false,
+				Columns: []*schema.Column{AuditLogsColumns[3]},
+			},
+			{
+				Name:    "auditlog_resource_type",
+				Unique:  false,
+				Columns: []*schema.Column{AuditLogsColumns[4]},
+			},
+			{
+				Name:    "auditlog_resource_id",
+				Unique:  false,
+				Columns: []*schema.Column{AuditLogsColumns[5]},
+			},
+			{
+				Name:    "auditlog_created_at",
+				Unique:  false,
+				Columns: []*schema.Column{AuditLogsColumns[15]},
+			},
+			{
+				Name:    "auditlog_user_id",
+				Unique:  false,
+				Columns: []*schema.Column{AuditLogsColumns[1]},
+			},
+			{
+				Name:    "auditlog_api_key_id",
+				Unique:  false,
+				Columns: []*schema.Column{AuditLogsColumns[2]},
+			},
+			{
+				Name:    "auditlog_result",
+				Unique:  false,
+				Columns: []*schema.Column{AuditLogsColumns[11]},
+			},
+			{
+				Name:    "auditlog_resource_type_resource_id_created_at",
+				Unique:  false,
+				Columns: []*schema.Column{AuditLogsColumns[4], AuditLogsColumns[5], AuditLogsColumns[15]},
+			},
+			{
+				Name:    "auditlog_user_id_created_at",
+				Unique:  false,
+				Columns: []*schema.Column{AuditLogsColumns[1], AuditLogsColumns[15]},
+			},
+			{
+				Name:    "auditlog_action_created_at",
+				Unique:  false,
+				Columns: []*schema.Column{AuditLogsColumns[3], AuditLogsColumns[15]},
+			},
+		},
+	}
+	// DlpRulesColumns holds the columns for the "dlp_rules" table.
+	DlpRulesColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt64, Increment: true},
+		{Name: "name", Type: field.TypeString, Size: 100},
+		{Name: "description", Type: field.TypeString, SchemaType: map[string]string{"postgres": "text"}},
+		{Name: "category", Type: field.TypeString, Size: 50},
+		{Name: "pattern", Type: field.TypeString, SchemaType: map[string]string{"postgres": "text"}},
+		{Name: "pattern_type", Type: field.TypeString, Size: 20, Default: "regex"},
+		{Name: "severity", Type: field.TypeString, Size: 20, Default: "high"},
+		{Name: "action", Type: field.TypeString, Size: 20, Default: "block"},
+		{Name: "mask_content", Type: field.TypeBool, Default: false},
+		{Name: "enabled", Type: field.TypeBool, Default: true},
+		{Name: "priority", Type: field.TypeInt, Default: 0},
+		{Name: "scope", Type: field.TypeString, Size: 20, Default: "all"},
+		{Name: "models", Type: field.TypeString, Nullable: true, SchemaType: map[string]string{"postgres": "jsonb"}},
+		{Name: "metadata", Type: field.TypeString, Nullable: true, SchemaType: map[string]string{"postgres": "jsonb"}},
+		{Name: "created_by", Type: field.TypeInt64, Nullable: true},
+		{Name: "created_at", Type: field.TypeTime, SchemaType: map[string]string{"postgres": "timestamptz"}},
+		{Name: "updated_at", Type: field.TypeTime, SchemaType: map[string]string{"postgres": "timestamptz"}},
+	}
+	// DlpRulesTable holds the schema information for the "dlp_rules" table.
+	DlpRulesTable = &schema.Table{
+		Name:       "dlp_rules",
+		Columns:    DlpRulesColumns,
+		PrimaryKey: []*schema.Column{DlpRulesColumns[0]},
+		Indexes: []*schema.Index{
+			{
+				Name:    "dlprule_category",
+				Unique:  false,
+				Columns: []*schema.Column{DlpRulesColumns[3]},
+			},
+			{
+				Name:    "dlprule_enabled",
+				Unique:  false,
+				Columns: []*schema.Column{DlpRulesColumns[9]},
+			},
+			{
+				Name:    "dlprule_severity",
+				Unique:  false,
+				Columns: []*schema.Column{DlpRulesColumns[6]},
+			},
+			{
+				Name:    "dlprule_priority",
+				Unique:  false,
+				Columns: []*schema.Column{DlpRulesColumns[10]},
+			},
+			{
+				Name:    "dlprule_scope",
+				Unique:  false,
+				Columns: []*schema.Column{DlpRulesColumns[11]},
+			},
+		},
+	}
 	// ErrorPassthroughRulesColumns holds the columns for the "error_passthrough_rules" table.
 	ErrorPassthroughRulesColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt64, Increment: true},
@@ -410,6 +546,10 @@ var (
 		{Name: "sort_order", Type: field.TypeInt, Default: 0},
 		{Name: "allow_messages_dispatch", Type: field.TypeBool, Default: false},
 		{Name: "default_mapped_model", Type: field.TypeString, Size: 100, Default: ""},
+		{Name: "security_level", Type: field.TypeString, Size: 20, Default: "basic"},
+		{Name: "l1_enabled", Type: field.TypeBool, Default: true},
+		{Name: "l2_enabled", Type: field.TypeBool, Default: false},
+		{Name: "l3_enabled", Type: field.TypeBool, Default: false},
 	}
 	// GroupsTable holds the schema information for the "groups" table.
 	GroupsTable = &schema.Table{
@@ -446,6 +586,11 @@ var (
 				Name:    "group_sort_order",
 				Unique:  false,
 				Columns: []*schema.Column{GroupsColumns[30]},
+			},
+			{
+				Name:    "group_security_level",
+				Unique:  false,
+				Columns: []*schema.Column{GroupsColumns[33]},
 			},
 		},
 	}
@@ -643,6 +788,87 @@ var (
 				Name:    "redeemcode_group_id",
 				Unique:  false,
 				Columns: []*schema.Column{RedeemCodesColumns[9]},
+			},
+		},
+	}
+	// SecurityEventsColumns holds the columns for the "security_events" table.
+	SecurityEventsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt64, Increment: true},
+		{Name: "event_type", Type: field.TypeString, Size: 20},
+		{Name: "severity", Type: field.TypeString, Size: 20},
+		{Name: "category", Type: field.TypeString, Size: 50},
+		{Name: "title", Type: field.TypeString, Size: 255},
+		{Name: "description", Type: field.TypeString, SchemaType: map[string]string{"postgres": "text"}},
+		{Name: "user_id", Type: field.TypeInt64, Nullable: true},
+		{Name: "api_key_id", Type: field.TypeInt64, Nullable: true},
+		{Name: "request_id", Type: field.TypeString, Nullable: true, Size: 64},
+		{Name: "model", Type: field.TypeString, Nullable: true, Size: 100},
+		{Name: "action", Type: field.TypeString, Size: 20, Default: "allow"},
+		{Name: "matched_patterns", Type: field.TypeString, Nullable: true, SchemaType: map[string]string{"postgres": "text"}},
+		{Name: "confidence", Type: field.TypeFloat64, Default: 0, SchemaType: map[string]string{"postgres": "decimal(5,4)"}},
+		{Name: "request_snapshot", Type: field.TypeString, Nullable: true, SchemaType: map[string]string{"postgres": "text"}},
+		{Name: "source_ip", Type: field.TypeString, Nullable: true, Size: 45},
+		{Name: "user_agent", Type: field.TypeString, Nullable: true, Size: 512},
+		{Name: "status", Type: field.TypeString, Size: 20, Default: "new"},
+		{Name: "resolution", Type: field.TypeString, Nullable: true, SchemaType: map[string]string{"postgres": "text"}},
+		{Name: "created_at", Type: field.TypeTime, SchemaType: map[string]string{"postgres": "timestamptz"}},
+		{Name: "resolved_at", Type: field.TypeTime, Nullable: true, SchemaType: map[string]string{"postgres": "timestamptz"}},
+	}
+	// SecurityEventsTable holds the schema information for the "security_events" table.
+	SecurityEventsTable = &schema.Table{
+		Name:       "security_events",
+		Columns:    SecurityEventsColumns,
+		PrimaryKey: []*schema.Column{SecurityEventsColumns[0]},
+		Indexes: []*schema.Index{
+			{
+				Name:    "securityevent_event_type",
+				Unique:  false,
+				Columns: []*schema.Column{SecurityEventsColumns[1]},
+			},
+			{
+				Name:    "securityevent_severity",
+				Unique:  false,
+				Columns: []*schema.Column{SecurityEventsColumns[2]},
+			},
+			{
+				Name:    "securityevent_category",
+				Unique:  false,
+				Columns: []*schema.Column{SecurityEventsColumns[3]},
+			},
+			{
+				Name:    "securityevent_status",
+				Unique:  false,
+				Columns: []*schema.Column{SecurityEventsColumns[16]},
+			},
+			{
+				Name:    "securityevent_created_at",
+				Unique:  false,
+				Columns: []*schema.Column{SecurityEventsColumns[18]},
+			},
+			{
+				Name:    "securityevent_user_id",
+				Unique:  false,
+				Columns: []*schema.Column{SecurityEventsColumns[6]},
+			},
+			{
+				Name:    "securityevent_api_key_id",
+				Unique:  false,
+				Columns: []*schema.Column{SecurityEventsColumns[7]},
+			},
+			{
+				Name:    "securityevent_action",
+				Unique:  false,
+				Columns: []*schema.Column{SecurityEventsColumns[10]},
+			},
+			{
+				Name:    "securityevent_status_created_at",
+				Unique:  false,
+				Columns: []*schema.Column{SecurityEventsColumns[16], SecurityEventsColumns[18]},
+			},
+			{
+				Name:    "securityevent_severity_created_at",
+				Unique:  false,
+				Columns: []*schema.Column{SecurityEventsColumns[2], SecurityEventsColumns[18]},
 			},
 		},
 	}
@@ -1126,6 +1352,8 @@ var (
 		AccountGroupsTable,
 		AnnouncementsTable,
 		AnnouncementReadsTable,
+		AuditLogsTable,
+		DlpRulesTable,
 		ErrorPassthroughRulesTable,
 		GroupsTable,
 		IdempotencyRecordsTable,
@@ -1133,6 +1361,7 @@ var (
 		PromoCodeUsagesTable,
 		ProxiesTable,
 		RedeemCodesTable,
+		SecurityEventsTable,
 		SecuritySecretsTable,
 		SettingsTable,
 		TLSFingerprintProfilesTable,
@@ -1169,6 +1398,12 @@ func init() {
 	AnnouncementReadsTable.Annotation = &entsql.Annotation{
 		Table: "announcement_reads",
 	}
+	AuditLogsTable.Annotation = &entsql.Annotation{
+		Table: "audit_logs",
+	}
+	DlpRulesTable.Annotation = &entsql.Annotation{
+		Table: "dlp_rules",
+	}
 	ErrorPassthroughRulesTable.Annotation = &entsql.Annotation{
 		Table: "error_passthrough_rules",
 	}
@@ -1193,6 +1428,9 @@ func init() {
 	RedeemCodesTable.ForeignKeys[1].RefTable = UsersTable
 	RedeemCodesTable.Annotation = &entsql.Annotation{
 		Table: "redeem_codes",
+	}
+	SecurityEventsTable.Annotation = &entsql.Annotation{
+		Table: "security_events",
 	}
 	SecuritySecretsTable.Annotation = &entsql.Annotation{
 		Table: "security_secrets",

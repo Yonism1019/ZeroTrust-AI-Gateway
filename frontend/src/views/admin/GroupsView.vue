@@ -1684,6 +1684,109 @@
           </button>
         </div>
 
+        <!-- 安全等级配置 -->
+        <div class="border-t border-gray-200 dark:border-dark-600 pt-4 mt-4">
+          <h4 class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
+            {{ t('admin.groups.security.title') }}
+          </h4>
+          <p class="text-xs text-gray-500 dark:text-gray-400 mb-4">
+            {{ t('admin.groups.security.description') }}
+          </p>
+
+          <!-- 安全等级预设 -->
+          <div class="mb-4">
+            <label class="input-label">{{ t('admin.groups.security.level') }}</label>
+            <Select
+              v-model="editForm.security_level"
+              :options="securityLevelOptions"
+            />
+          </div>
+
+          <!-- 检测开关 -->
+          <div class="space-y-3">
+            <!-- L1检测 -->
+            <div class="flex items-center justify-between">
+              <div>
+                <label class="text-sm font-medium text-gray-700 dark:text-gray-300">
+                  {{ t('admin.groups.security.l1') }}
+                </label>
+                <p class="text-xs text-gray-500 dark:text-gray-400">
+                  {{ t('admin.groups.security.l1Hint') }}
+                </p>
+              </div>
+              <button
+                type="button"
+                @click="editForm.l1_enabled = !editForm.l1_enabled"
+                :class="[
+                  'relative inline-flex h-6 w-11 items-center rounded-full transition-colors',
+                  editForm.l1_enabled ? 'bg-primary-500' : 'bg-gray-300 dark:bg-dark-600'
+                ]"
+              >
+                <span
+                  :class="[
+                    'inline-block h-4 w-4 transform rounded-full bg-white shadow transition-transform',
+                    editForm.l1_enabled ? 'translate-x-6' : 'translate-x-1'
+                  ]"
+                />
+              </button>
+            </div>
+
+            <!-- L2检测 -->
+            <div class="flex items-center justify-between">
+              <div>
+                <label class="text-sm font-medium text-gray-700 dark:text-gray-300">
+                  {{ t('admin.groups.security.l2') }}
+                </label>
+                <p class="text-xs text-gray-500 dark:text-gray-400">
+                  {{ t('admin.groups.security.l2Hint') }}
+                </p>
+              </div>
+              <button
+                type="button"
+                @click="editForm.l2_enabled = !editForm.l2_enabled"
+                :class="[
+                  'relative inline-flex h-6 w-11 items-center rounded-full transition-colors',
+                  editForm.l2_enabled ? 'bg-primary-500' : 'bg-gray-300 dark:bg-dark-600'
+                ]"
+              >
+                <span
+                  :class="[
+                    'inline-block h-4 w-4 transform rounded-full bg-white shadow transition-transform',
+                    editForm.l2_enabled ? 'translate-x-6' : 'translate-x-1'
+                  ]"
+                />
+              </button>
+            </div>
+
+            <!-- L3检测 -->
+            <div class="flex items-center justify-between">
+              <div>
+                <label class="text-sm font-medium text-gray-700 dark:text-gray-300">
+                  {{ t('admin.groups.security.l3') }}
+                </label>
+                <p class="text-xs text-gray-500 dark:text-gray-400">
+                  {{ t('admin.groups.security.l3Hint') }}
+                </p>
+              </div>
+              <button
+                type="button"
+                @click="editForm.l3_enabled = !editForm.l3_enabled"
+                :class="[
+                  'relative inline-flex h-6 w-11 items-center rounded-full transition-colors',
+                  editForm.l3_enabled ? 'bg-primary-500' : 'bg-gray-300 dark:bg-dark-600'
+                ]"
+              >
+                <span
+                  :class="[
+                    'inline-block h-4 w-4 transform rounded-full bg-white shadow transition-transform',
+                    editForm.l3_enabled ? 'translate-x-6' : 'translate-x-1'
+                  ]"
+                />
+              </button>
+            </div>
+          </div>
+        </div>
+
       </form>
 
       <template #footer>
@@ -1895,6 +1998,13 @@ const platformOptions = computed(() => [
   { value: 'sora', label: 'Sora' }
 ])
 
+const securityLevelOptions = [
+  { value: 'none', label: 'admin.groups.security.levels.none' },
+  { value: 'basic', label: 'admin.groups.security.levels.basic' },
+  { value: 'standard', label: 'admin.groups.security.levels.standard' },
+  { value: 'strict', label: 'admin.groups.security.levels.strict' }
+]
+
 const platformFilterOptions = computed(() => [
   { value: '', label: t('admin.groups.allPlatforms') },
   { value: 'anthropic', label: 'Anthropic' },
@@ -2069,6 +2179,11 @@ const createForm = reactive({
   supported_model_scopes: ['claude', 'gemini_text', 'gemini_image'] as string[],
   // MCP XML 协议注入开关（仅 antigravity 平台）
   mcp_xml_inject: true,
+  // 安全等级配置
+  security_level: 'basic' as string,
+  l1_enabled: true,
+  l2_enabled: false,
+  l3_enabled: false,
   // 从分组复制账号
   copy_accounts_from_group_ids: [] as number[]
 })
@@ -2313,6 +2428,11 @@ const editForm = reactive({
   supported_model_scopes: ['claude', 'gemini_text', 'gemini_image'] as string[],
   // MCP XML 协议注入开关（仅 antigravity 平台）
   mcp_xml_inject: true,
+  // 安全等级配置
+  security_level: 'basic' as string,
+  l1_enabled: true,
+  l2_enabled: false,
+  l3_enabled: false,
   // 从分组复制账号
   copy_accounts_from_group_ids: [] as number[]
 })
@@ -2543,6 +2663,11 @@ const handleEdit = async (group: AdminGroup) => {
   editForm.model_routing_enabled = group.model_routing_enabled || false
   editForm.supported_model_scopes = group.supported_model_scopes || ['claude', 'gemini_text', 'gemini_image']
   editForm.mcp_xml_inject = group.mcp_xml_inject ?? true
+  // 安全等级配置
+  editForm.security_level = group.security_level || 'basic'
+  editForm.l1_enabled = group.l1_enabled ?? true
+  editForm.l2_enabled = group.l2_enabled ?? false
+  editForm.l3_enabled = group.l3_enabled ?? false
   editForm.copy_accounts_from_group_ids = [] // 复制账号字段每次编辑时重置为空
   // 加载模型路由规则（异步加载账号名称）
   editModelRoutingRules.value = await convertApiFormatToRoutingRules(group.model_routing)

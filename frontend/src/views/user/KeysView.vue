@@ -431,6 +431,40 @@
           </Select>
         </div>
 
+        <!-- Account Selection (上游账户绑定) -->
+        <div>
+          <label class="input-label">{{ t('keys.accountLabel') }}</label>
+          <Select
+            v-model="formData.account_id"
+            :options="accountOptions"
+            :placeholder="t('keys.selectAccount')"
+            :searchable="true"
+            :search-placeholder="t('keys.searchAccount')"
+            :disabled="!accounts.length"
+          >
+            <template #selected="{ option }">
+              <span v-if="option" class="flex items-center gap-2">
+                <span class="font-medium">{{ (option as unknown as AccountOption).label }}</span>
+                <span class="text-xs text-gray-500">({{ (option as unknown as AccountOption).platform }})</span>
+              </span>
+              <span v-else class="text-gray-400">{{ t('keys.selectAccount') }}</span>
+            </template>
+            <template #option="{ option, selected }">
+              <div class="flex items-center justify-between w-full">
+                <div class="flex flex-col">
+                  <span class="font-medium">{{ (option as unknown as AccountOption).label }}</span>
+                  <span class="text-xs text-gray-500">{{ (option as unknown as AccountOption).platform }}</span>
+                </div>
+                <span v-if="selected" class="text-primary-500">✓</span>
+              </div>
+            </template>
+          </Select>
+          <p v-if="!accounts.length" class="input-hint text-yellow-600 dark:text-yellow-400">
+            {{ t('keys.noAccountsAvailable') }}
+          </p>
+          <p v-else class="input-hint">{{ t('keys.accountHint') }}</p>
+        </div>
+
         <!-- Custom Key Section (only for create) -->
         <div v-if="!showEditModal" class="space-y-3">
           <div class="flex items-center justify-between">
@@ -1060,7 +1094,7 @@ import TablePageLayout from '@/components/layout/TablePageLayout.vue'
 	import EndpointPopover from '@/components/keys/EndpointPopover.vue'
 	import GroupBadge from '@/components/common/GroupBadge.vue'
 	import GroupOptionItem from '@/components/common/GroupOptionItem.vue'
-	import type { ApiKey, Group, PublicSettings, SubscriptionType, GroupPlatform } from '@/types'
+	import type { ApiKey, Group, Account, PublicSettings, SubscriptionType, GroupPlatform } from '@/types'
 import type { Column } from '@/components/common/types'
 import type { BatchApiKeyUsageStats } from '@/api/usage'
 import { formatDateTime } from '@/utils/format'
@@ -1082,6 +1116,12 @@ interface GroupOption {
   platform: GroupPlatform
 }
 
+interface AccountOption {
+  value: number
+  label: string
+  platform: string
+}
+
 const appStore = useAppStore()
 const onboardingStore = useOnboardingStore()
 const { copyToClipboard: clipboardCopy } = useClipboard()
@@ -1101,6 +1141,7 @@ const columns = computed<Column[]>(() => [
 
 const apiKeys = ref<ApiKey[]>([])
 const groups = ref<Group[]>([])
+const accounts = ref<Account[]>([])
 const loading = ref(false)
 const submitting = ref(false)
 const now = ref(new Date())
@@ -1154,6 +1195,7 @@ const setGroupButtonRef = (keyId: number, el: Element | ComponentPublicInstance 
 const formData = ref({
   name: '',
   group_id: null as number | null,
+  account_id: null as number | null,
   status: 'active' as 'active' | 'inactive',
   use_custom_key: false,
   custom_key: '',
@@ -1234,6 +1276,15 @@ const groupOptions = computed(() =>
     userRate: userGroupRates.value[group.id] ?? null,
     subscriptionType: group.subscription_type,
     platform: group.platform
+  }))
+)
+
+// Convert accounts to Select options format
+const accountOptions = computed(() =>
+  accounts.value.map((account) => ({
+    value: account.id,
+    label: account.name,
+    platform: account.platform
   }))
 )
 
@@ -1331,6 +1382,28 @@ const loadUserGroupRates = async () => {
   }
 }
 
+// Load accounts available for binding to API keys
+// Uses the user-level accounts API endpoint
+const loadAccounts = async () => {
+  try {
+    const response = await fetch('/api/v1/accounts', {
+      headers: { 'Authorization': `Bearer ${localStorage.getItem('auth_token')}` }
+    })
+    if (response.ok) {
+      const data = await response.json()
+      // API returns { success: true, data: [...] } format
+      accounts.value = data.data || []
+    } else {
+      // If API returns error, assume no accounts available
+      accounts.value = []
+    }
+  } catch (error) {
+    // Network error or API not implemented - graceful degradation
+    console.error('Failed to load accounts:', error)
+    accounts.value = []
+  }
+}
+
 const loadPublicSettings = async () => {
   try {
     publicSettings.value = await authAPI.getPublicSettings()
@@ -1367,6 +1440,7 @@ const editKey = (key: ApiKey) => {
   formData.value = {
     name: key.name,
     group_id: key.group_id,
+    account_id: key.account_id || null,
     status: key.status === 'quota_exhausted' || key.status === 'expired' ? 'inactive' : key.status,
     use_custom_key: false,
     custom_key: '',
@@ -1518,6 +1592,7 @@ const handleSubmit = async () => {
       await keysAPI.update(selectedKey.value.id, {
         name: formData.value.name,
         group_id: formData.value.group_id,
+        account_id: formData.value.account_id,
         status: formData.value.status,
         ip_whitelist: ipWhitelist,
         ip_blacklist: ipBlacklist,
@@ -1533,6 +1608,7 @@ const handleSubmit = async () => {
       await keysAPI.create(
         formData.value.name,
         formData.value.group_id,
+        formData.value.account_id,
         customKey,
         ipWhitelist,
         ipBlacklist,
@@ -1584,6 +1660,7 @@ const closeModals = () => {
   formData.value = {
     name: '',
     group_id: null,
+    account_id: null,
     status: 'active',
     use_custom_key: false,
     custom_key: '',
@@ -1781,6 +1858,7 @@ onMounted(() => {
   loadApiKeys()
   loadGroups()
   loadUserGroupRates()
+  loadAccounts()
   loadPublicSettings()
   document.addEventListener('click', closeGroupSelector)
   resetTimer = setInterval(() => { now.value = new Date() }, 60000)

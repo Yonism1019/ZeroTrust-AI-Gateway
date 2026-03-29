@@ -60,9 +60,9 @@ const architectureLayers = [
 const techStack = [
   { category: '网关核心', tech: 'Go', desc: '高性能、低延迟' },
   { category: '策略引擎', tech: 'Go + Python', desc: '性能与生态兼顾' },
-  { category: 'NER模型', tech: '轻量BERT/LLaMA', desc: '精度与性能平衡' },
+  { category: 'NER模型', tech: 'Python', desc: '精度与性能平衡' },
   { category: '缓存', tech: 'Redis', desc: '高性能、支持集群' },
-  { category: '数据库', tech: 'PostgreSQL + ClickHouse', desc: '业务与审计分离' },
+  { category: '数据库', tech: 'Postgres + ClickHouse', desc: '业务与审计分离' },
   { category: '前端', tech: 'Vue3 + Element Plus', desc: '企业级UI' },
 ];
 
@@ -203,7 +203,7 @@ export function Architecture() {
           <div className="mt-12 glass rounded-2xl p-8 border border-white/5">
             <h3 className="text-xl font-bold text-white mb-6 text-center">数据流向</h3>
             <div className="flex flex-col md:flex-row items-center justify-center gap-4">
-              {['用户请求', 'L1检测', 'L2检测', 'AI模型', '响应拦截', '返回用户'].map((step, index) => (
+              {['用户请求', '分级检测','AI模型', '响应拦截', '返回用户'].map((step, index) => (
                 <div key={step} className="flex items-center gap-4">
                   <motion.div
                     initial={{ opacity: 0, scale: 0.8 }}

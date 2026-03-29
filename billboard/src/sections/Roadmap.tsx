@@ -6,8 +6,8 @@ import { ScrollReveal } from '../components/ScrollReveal';
 const roadmapPhases = [
   {
     phase: 'Phase 1',
-    title: 'MVP参赛版',
-    time: '2-3周',
+    title: 'MVP',
+    time: '1周',
     icon: Rocket,
     color: 'electric-cyan',
     status: 'current',
@@ -16,9 +16,9 @@ const roadmapPhases = [
       'L1规则拦截（正则+DLP）',
       '基础日志记录',
       '简单管理后台',
-      '单模型支持（OpenAI）',
+      '多模型支持（OpenAI/Anthropic）',
     ],
-    deliverable: '可运行的演示Demo，具备基础安全拦截能力',
+    deliverable: '可运行的演示Demo，后台具备基础安全拦截能力',
   },
   {
     phase: 'Phase 2',
@@ -34,7 +34,7 @@ const roadmapPhases = [
       '告警通知系统',
       '实时仪表盘',
     ],
-    deliverable: '智能脱敏 + 多模型 + 成本统计',
+    deliverable: '智能脱敏 + 多模型 + 成本统计，可小规模内测使用',
   },
   {
     phase: 'Phase 3',
@@ -50,7 +50,7 @@ const roadmapPhases = [
       'AUTO智能策略',
       '完整审计日志系统',
     ],
-    deliverable: '深度安全 + 可视化平台 + 实时告警',
+    deliverable: '深度安全 + 可视化平台 + 实时告警，正式投入使用',
   },
   {
     phase: 'Phase 4',
@@ -66,7 +66,7 @@ const roadmapPhases = [
       '高可用架构',
       'SLA保障体系',
     ],
-    deliverable: '插件生态 + 用户画像 + 私有化部署',
+    deliverable: '插件生态 + 用户画像 ，细节打磨，满足企业级标准',
   },
 ];
 

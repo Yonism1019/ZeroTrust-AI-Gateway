@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Shield, Github, Twitter, Mail, Linkedin } from 'lucide-react';
+import { Shield, Mail } from 'lucide-react';
 
 const footerLinks = {
   product: {
@@ -21,21 +21,17 @@ const footerLinks = {
     ],
   },
   company: {
-    title: '公司',
+    title: '关于',
     links: [
-      { label: '关于我们', href: '#' },
-      { label: '加入我们', href: '#' },
-      { label: '联系方式', href: '#' },
-      { label: '新闻动态', href: '#' },
+      { label: '关于我们', href: 'mailto:990908@leapmotor.com' },
+      { label: '联系方式', href: 'mailto:990908@leapmotor.com' },
+
     ],
   },
 };
 
 const socialLinks = [
-  { icon: Github, href: '#', label: 'GitHub' },
-  { icon: Twitter, href: '#', label: 'Twitter' },
-  { icon: Linkedin, href: '#', label: 'LinkedIn' },
-  { icon: Mail, href: '#', label: 'Email' },
+  { icon: Mail, href: 'mailto:990908@leapmotor.com', label: 'Email' },
 ];
 
 export function Footer() {

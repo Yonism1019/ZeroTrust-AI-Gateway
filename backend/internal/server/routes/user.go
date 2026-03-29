@@ -48,6 +48,12 @@ func RegisterUserRoutes(
 			keys.DELETE("/:id", h.APIKey.Delete)
 		}
 
+		// 账户管理（用户可见的账户列表，用于API密钥绑定）
+		accounts := authenticated.Group("/accounts")
+		{
+			accounts.GET("", h.APIKey.ListAvailableAccounts)
+		}
+
 		// 用户可用分组（非管理员接口）
 		groups := authenticated.Group("/groups")
 		{

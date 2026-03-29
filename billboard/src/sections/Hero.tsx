@@ -76,7 +76,7 @@ export function Hero() {
             transition={{ duration: 0.8, delay: 0.8 }}
             className="text-lg text-silver max-w-3xl mx-auto mb-10 leading-relaxed"
           >
-            所有AI调用，必须经过零影AI——实现AI调用可控、数据流动可见、
+            所有AI调用，必须经过零影AI<br></br>AI调用可控、数据流动可见、
             风险行为可拦截、成本使用可量化
           </motion.p>
 
@@ -87,8 +87,8 @@ export function Hero() {
             transition={{ duration: 0.8, delay: 1 }}
             className="flex flex-col sm:flex-row gap-4 justify-center mb-16"
           >
-            <GlowButton size="lg">立即体验</GlowButton>
-            <GlowButton variant="secondary" size="lg">
+            <GlowButton size="lg" onClick={() => window.open('http://zeroai.yonism.cn/', '_blank')}>立即体验</GlowButton>
+            <GlowButton variant="secondary" size="lg" onClick={() => window.location.href = 'mailto:990908@leapmotor.com'}>
               了解更多
             </GlowButton>
           </motion.div>

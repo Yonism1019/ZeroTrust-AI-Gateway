@@ -71,6 +71,13 @@ func (r *groupRepository) Create(ctx context.Context, groupIn *service.Group) er
 	// 设置支持的模型系列（始终设置，空数组表示不限制）
 	builder = builder.SetSupportedModelScopes(groupIn.SupportedModelScopes)
 
+	// 安全等级配置
+	builder = builder.
+		SetSecurityLevel(groupIn.SecurityLevel).
+		SetL1Enabled(groupIn.L1Enabled).
+		SetL2Enabled(groupIn.L2Enabled).
+		SetL3Enabled(groupIn.L3Enabled)
+
 	created, err := builder.Save(ctx)
 	if err == nil {
 		groupIn.ID = created.ID
@@ -186,6 +193,13 @@ func (r *groupRepository) Update(ctx context.Context, groupIn *service.Group) er
 
 	// 处理 SupportedModelScopes（始终设置，空数组表示不限制）
 	builder = builder.SetSupportedModelScopes(groupIn.SupportedModelScopes)
+
+	// 安全等级配置
+	builder = builder.
+		SetSecurityLevel(groupIn.SecurityLevel).
+		SetL1Enabled(groupIn.L1Enabled).
+		SetL2Enabled(groupIn.L2Enabled).
+		SetL3Enabled(groupIn.L3Enabled)
 
 	updated, err := builder.Save(ctx)
 	if err != nil {

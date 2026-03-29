@@ -352,7 +352,9 @@ export default {
     mySubscriptions: 'My Subscriptions',
     buySubscription: 'Recharge / Subscription',
     docs: 'Docs',
-    sora: 'Sora Studio'
+    sora: 'Sora Studio',
+    securityEvents: 'Security Events',
+    auditLogs: 'Audit Logs'
   },
 
   // Auth
@@ -585,6 +587,11 @@ export default {
     selectGroup: 'Select a group',
     statusLabel: 'Status',
     selectStatus: 'Select status',
+    accountLabel: 'Upstream Account',
+    selectAccount: 'Select upstream account',
+    searchAccount: 'Search accounts...',
+    noAccountsAvailable: 'No accounts available',
+    accountHint: 'When bound, requests will use this account directly without group scheduling',
     saving: 'Saving...',
     noKeysYet: 'No API keys yet',
     createFirstKey: 'Create your first API key to get started with the API.',
@@ -1737,6 +1744,26 @@ export default {
         geminiText: 'Gemini Text',
         geminiImage: 'Gemini Image',
         hint: 'Select at least one model family'
+      },
+      security: {
+        title: 'Security Level',
+        tooltip: 'Configure security detection levels. L1=Fast check (<1ms), L2=Smart desensitization (<50ms), L3=Semantic analysis (<100ms)',
+        level: 'Security Level',
+        levels: {
+          none: 'None',
+          basic: 'Basic',
+          standard: 'Standard',
+          strict: 'Strict'
+        },
+        l1: 'L1 Detection',
+        l1Desc: 'API keys, DB connections, private keys',
+        l1Enabled: 'Enable L1 detection',
+        l2: 'L2 Detection',
+        l2Desc: 'NER-based PII detection',
+        l2Enabled: 'Enable L2 detection',
+        l3: 'L3 Detection',
+        l3Desc: 'Semantic risk assessment',
+        l3Enabled: 'Enable L3 detection'
       }
     },
 
@@ -3307,6 +3334,95 @@ export default {
           failed: 'Failed',
           canceled: 'Canceled'
         }
+      }
+    },
+
+    // Security
+    security: {
+      events: {
+        title: 'Security Events',
+        description: 'View and manage security risk events',
+        failedToLoad: 'Failed to load security events',
+        severity: 'Severity',
+        status: 'Status',
+        category: 'Category',
+        allSeverities: 'All Severities',
+        allStatuses: 'All Statuses',
+        allCategories: 'All Categories',
+        eventDetail: 'Event Detail',
+        eventType: 'Event Type',
+        action: 'Action',
+        confidence: 'Confidence',
+        sourceIp: 'Source IP',
+        userAgent: 'User Agent',
+        matchedPatterns: 'Matched Patterns',
+        requestSnapshot: 'Request Snapshot',
+        resolution: 'Resolution',
+        resolve: 'Resolve',
+        resolveEvent: 'Resolve Event',
+        resolvedAt: 'Resolved At',
+        // Severity options
+        severityCritical: 'Critical',
+        severityHigh: 'High',
+        severityMedium: 'Medium',
+        severityLow: 'Low',
+        severityInfo: 'Info',
+        // Status options
+        statusNew: 'New',
+        statusInvestigating: 'Investigating',
+        statusResolved: 'Resolved',
+        statusFalsePositive: 'False Positive',
+        // Category options
+        categorySensitiveData: 'Sensitive Data',
+        categoryShadowAI: 'Shadow AI',
+        categoryDangerousInstruction: 'Dangerous Instruction',
+        categoryCostAnomaly: 'Cost Anomaly'
+      },
+      auditLogs: {
+        title: 'Audit Logs',
+        description: 'View system operation audit logs',
+        failedToLoad: 'Failed to load audit logs',
+        id: 'ID',
+        action: 'Action',
+        result: 'Result',
+        resourceType: 'Resource Type',
+        allActions: 'All Actions',
+        allResults: 'All Results',
+        logDetail: 'Log Detail',
+        resourceId: 'Resource ID',
+        userId: 'User ID',
+        apiKeyId: 'API Key ID',
+        actor: 'Actor',
+        actorIp: 'Actor IP',
+        sessionId: 'Session ID',
+        requestId: 'Request ID',
+        changes: 'Changes',
+        createdAt: 'Created At',
+        failureReason: 'Failure Reason',
+        recordHash: 'Record Hash',
+        previousHash: 'Previous Hash',
+        verifyChain: 'Verify Chain Integrity',
+        verifyChainDescription: 'Verify hash chain integrity for the specified range',
+        fromId: 'From ID',
+        toId: 'To ID',
+        fromIdPlaceholder: 'Enter start ID',
+        toIdPlaceholder: 'Enter end ID',
+        verify: 'Verify',
+        verifyResult: 'Verification Result',
+        // Action options
+        actionCreate: 'Create',
+        actionRead: 'Read',
+        actionUpdate: 'Update',
+        actionDelete: 'Delete',
+        actionExecute: 'Execute',
+        actionLogin: 'Login',
+        actionLogout: 'Logout',
+        // Result options
+        resultSuccess: 'Success',
+        resultFailure: 'Failure',
+        resultPartial: 'Partial',
+        chainValid: 'Hash chain is valid',
+        chainInvalid: 'Hash chain has been tampered'
       }
     },
 

@@ -452,6 +452,62 @@ func (_c *GroupCreate) SetNillableDefaultMappedModel(v *string) *GroupCreate {
 	return _c
 }
 
+// SetSecurityLevel sets the "security_level" field.
+func (_c *GroupCreate) SetSecurityLevel(v string) *GroupCreate {
+	_c.mutation.SetSecurityLevel(v)
+	return _c
+}
+
+// SetNillableSecurityLevel sets the "security_level" field if the given value is not nil.
+func (_c *GroupCreate) SetNillableSecurityLevel(v *string) *GroupCreate {
+	if v != nil {
+		_c.SetSecurityLevel(*v)
+	}
+	return _c
+}
+
+// SetL1Enabled sets the "l1_enabled" field.
+func (_c *GroupCreate) SetL1Enabled(v bool) *GroupCreate {
+	_c.mutation.SetL1Enabled(v)
+	return _c
+}
+
+// SetNillableL1Enabled sets the "l1_enabled" field if the given value is not nil.
+func (_c *GroupCreate) SetNillableL1Enabled(v *bool) *GroupCreate {
+	if v != nil {
+		_c.SetL1Enabled(*v)
+	}
+	return _c
+}
+
+// SetL2Enabled sets the "l2_enabled" field.
+func (_c *GroupCreate) SetL2Enabled(v bool) *GroupCreate {
+	_c.mutation.SetL2Enabled(v)
+	return _c
+}
+
+// SetNillableL2Enabled sets the "l2_enabled" field if the given value is not nil.
+func (_c *GroupCreate) SetNillableL2Enabled(v *bool) *GroupCreate {
+	if v != nil {
+		_c.SetL2Enabled(*v)
+	}
+	return _c
+}
+
+// SetL3Enabled sets the "l3_enabled" field.
+func (_c *GroupCreate) SetL3Enabled(v bool) *GroupCreate {
+	_c.mutation.SetL3Enabled(v)
+	return _c
+}
+
+// SetNillableL3Enabled sets the "l3_enabled" field if the given value is not nil.
+func (_c *GroupCreate) SetNillableL3Enabled(v *bool) *GroupCreate {
+	if v != nil {
+		_c.SetL3Enabled(*v)
+	}
+	return _c
+}
+
 // AddAPIKeyIDs adds the "api_keys" edge to the APIKey entity by IDs.
 func (_c *GroupCreate) AddAPIKeyIDs(ids ...int64) *GroupCreate {
 	_c.mutation.AddAPIKeyIDs(ids...)
@@ -649,6 +705,22 @@ func (_c *GroupCreate) defaults() error {
 		v := group.DefaultDefaultMappedModel
 		_c.mutation.SetDefaultMappedModel(v)
 	}
+	if _, ok := _c.mutation.SecurityLevel(); !ok {
+		v := group.DefaultSecurityLevel
+		_c.mutation.SetSecurityLevel(v)
+	}
+	if _, ok := _c.mutation.L1Enabled(); !ok {
+		v := group.DefaultL1Enabled
+		_c.mutation.SetL1Enabled(v)
+	}
+	if _, ok := _c.mutation.L2Enabled(); !ok {
+		v := group.DefaultL2Enabled
+		_c.mutation.SetL2Enabled(v)
+	}
+	if _, ok := _c.mutation.L3Enabled(); !ok {
+		v := group.DefaultL3Enabled
+		_c.mutation.SetL3Enabled(v)
+	}
 	return nil
 }
 
@@ -729,6 +801,23 @@ func (_c *GroupCreate) check() error {
 		if err := group.DefaultMappedModelValidator(v); err != nil {
 			return &ValidationError{Name: "default_mapped_model", err: fmt.Errorf(`ent: validator failed for field "Group.default_mapped_model": %w`, err)}
 		}
+	}
+	if _, ok := _c.mutation.SecurityLevel(); !ok {
+		return &ValidationError{Name: "security_level", err: errors.New(`ent: missing required field "Group.security_level"`)}
+	}
+	if v, ok := _c.mutation.SecurityLevel(); ok {
+		if err := group.SecurityLevelValidator(v); err != nil {
+			return &ValidationError{Name: "security_level", err: fmt.Errorf(`ent: validator failed for field "Group.security_level": %w`, err)}
+		}
+	}
+	if _, ok := _c.mutation.L1Enabled(); !ok {
+		return &ValidationError{Name: "l1_enabled", err: errors.New(`ent: missing required field "Group.l1_enabled"`)}
+	}
+	if _, ok := _c.mutation.L2Enabled(); !ok {
+		return &ValidationError{Name: "l2_enabled", err: errors.New(`ent: missing required field "Group.l2_enabled"`)}
+	}
+	if _, ok := _c.mutation.L3Enabled(); !ok {
+		return &ValidationError{Name: "l3_enabled", err: errors.New(`ent: missing required field "Group.l3_enabled"`)}
 	}
 	return nil
 }
@@ -884,6 +973,22 @@ func (_c *GroupCreate) createSpec() (*Group, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.DefaultMappedModel(); ok {
 		_spec.SetField(group.FieldDefaultMappedModel, field.TypeString, value)
 		_node.DefaultMappedModel = value
+	}
+	if value, ok := _c.mutation.SecurityLevel(); ok {
+		_spec.SetField(group.FieldSecurityLevel, field.TypeString, value)
+		_node.SecurityLevel = value
+	}
+	if value, ok := _c.mutation.L1Enabled(); ok {
+		_spec.SetField(group.FieldL1Enabled, field.TypeBool, value)
+		_node.L1Enabled = value
+	}
+	if value, ok := _c.mutation.L2Enabled(); ok {
+		_spec.SetField(group.FieldL2Enabled, field.TypeBool, value)
+		_node.L2Enabled = value
+	}
+	if value, ok := _c.mutation.L3Enabled(); ok {
+		_spec.SetField(group.FieldL3Enabled, field.TypeBool, value)
+		_node.L3Enabled = value
 	}
 	if nodes := _c.mutation.APIKeysIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
@@ -1599,6 +1704,54 @@ func (u *GroupUpsert) UpdateDefaultMappedModel() *GroupUpsert {
 	return u
 }
 
+// SetSecurityLevel sets the "security_level" field.
+func (u *GroupUpsert) SetSecurityLevel(v string) *GroupUpsert {
+	u.Set(group.FieldSecurityLevel, v)
+	return u
+}
+
+// UpdateSecurityLevel sets the "security_level" field to the value that was provided on create.
+func (u *GroupUpsert) UpdateSecurityLevel() *GroupUpsert {
+	u.SetExcluded(group.FieldSecurityLevel)
+	return u
+}
+
+// SetL1Enabled sets the "l1_enabled" field.
+func (u *GroupUpsert) SetL1Enabled(v bool) *GroupUpsert {
+	u.Set(group.FieldL1Enabled, v)
+	return u
+}
+
+// UpdateL1Enabled sets the "l1_enabled" field to the value that was provided on create.
+func (u *GroupUpsert) UpdateL1Enabled() *GroupUpsert {
+	u.SetExcluded(group.FieldL1Enabled)
+	return u
+}
+
+// SetL2Enabled sets the "l2_enabled" field.
+func (u *GroupUpsert) SetL2Enabled(v bool) *GroupUpsert {
+	u.Set(group.FieldL2Enabled, v)
+	return u
+}
+
+// UpdateL2Enabled sets the "l2_enabled" field to the value that was provided on create.
+func (u *GroupUpsert) UpdateL2Enabled() *GroupUpsert {
+	u.SetExcluded(group.FieldL2Enabled)
+	return u
+}
+
+// SetL3Enabled sets the "l3_enabled" field.
+func (u *GroupUpsert) SetL3Enabled(v bool) *GroupUpsert {
+	u.Set(group.FieldL3Enabled, v)
+	return u
+}
+
+// UpdateL3Enabled sets the "l3_enabled" field to the value that was provided on create.
+func (u *GroupUpsert) UpdateL3Enabled() *GroupUpsert {
+	u.SetExcluded(group.FieldL3Enabled)
+	return u
+}
+
 // UpdateNewValues updates the mutable fields using the new values that were set on create.
 // Using this option is equivalent to using:
 //
@@ -2292,6 +2445,62 @@ func (u *GroupUpsertOne) SetDefaultMappedModel(v string) *GroupUpsertOne {
 func (u *GroupUpsertOne) UpdateDefaultMappedModel() *GroupUpsertOne {
 	return u.Update(func(s *GroupUpsert) {
 		s.UpdateDefaultMappedModel()
+	})
+}
+
+// SetSecurityLevel sets the "security_level" field.
+func (u *GroupUpsertOne) SetSecurityLevel(v string) *GroupUpsertOne {
+	return u.Update(func(s *GroupUpsert) {
+		s.SetSecurityLevel(v)
+	})
+}
+
+// UpdateSecurityLevel sets the "security_level" field to the value that was provided on create.
+func (u *GroupUpsertOne) UpdateSecurityLevel() *GroupUpsertOne {
+	return u.Update(func(s *GroupUpsert) {
+		s.UpdateSecurityLevel()
+	})
+}
+
+// SetL1Enabled sets the "l1_enabled" field.
+func (u *GroupUpsertOne) SetL1Enabled(v bool) *GroupUpsertOne {
+	return u.Update(func(s *GroupUpsert) {
+		s.SetL1Enabled(v)
+	})
+}
+
+// UpdateL1Enabled sets the "l1_enabled" field to the value that was provided on create.
+func (u *GroupUpsertOne) UpdateL1Enabled() *GroupUpsertOne {
+	return u.Update(func(s *GroupUpsert) {
+		s.UpdateL1Enabled()
+	})
+}
+
+// SetL2Enabled sets the "l2_enabled" field.
+func (u *GroupUpsertOne) SetL2Enabled(v bool) *GroupUpsertOne {
+	return u.Update(func(s *GroupUpsert) {
+		s.SetL2Enabled(v)
+	})
+}
+
+// UpdateL2Enabled sets the "l2_enabled" field to the value that was provided on create.
+func (u *GroupUpsertOne) UpdateL2Enabled() *GroupUpsertOne {
+	return u.Update(func(s *GroupUpsert) {
+		s.UpdateL2Enabled()
+	})
+}
+
+// SetL3Enabled sets the "l3_enabled" field.
+func (u *GroupUpsertOne) SetL3Enabled(v bool) *GroupUpsertOne {
+	return u.Update(func(s *GroupUpsert) {
+		s.SetL3Enabled(v)
+	})
+}
+
+// UpdateL3Enabled sets the "l3_enabled" field to the value that was provided on create.
+func (u *GroupUpsertOne) UpdateL3Enabled() *GroupUpsertOne {
+	return u.Update(func(s *GroupUpsert) {
+		s.UpdateL3Enabled()
 	})
 }
 
@@ -3154,6 +3363,62 @@ func (u *GroupUpsertBulk) SetDefaultMappedModel(v string) *GroupUpsertBulk {
 func (u *GroupUpsertBulk) UpdateDefaultMappedModel() *GroupUpsertBulk {
 	return u.Update(func(s *GroupUpsert) {
 		s.UpdateDefaultMappedModel()
+	})
+}
+
+// SetSecurityLevel sets the "security_level" field.
+func (u *GroupUpsertBulk) SetSecurityLevel(v string) *GroupUpsertBulk {
+	return u.Update(func(s *GroupUpsert) {
+		s.SetSecurityLevel(v)
+	})
+}
+
+// UpdateSecurityLevel sets the "security_level" field to the value that was provided on create.
+func (u *GroupUpsertBulk) UpdateSecurityLevel() *GroupUpsertBulk {
+	return u.Update(func(s *GroupUpsert) {
+		s.UpdateSecurityLevel()
+	})
+}
+
+// SetL1Enabled sets the "l1_enabled" field.
+func (u *GroupUpsertBulk) SetL1Enabled(v bool) *GroupUpsertBulk {
+	return u.Update(func(s *GroupUpsert) {
+		s.SetL1Enabled(v)
+	})
+}
+
+// UpdateL1Enabled sets the "l1_enabled" field to the value that was provided on create.
+func (u *GroupUpsertBulk) UpdateL1Enabled() *GroupUpsertBulk {
+	return u.Update(func(s *GroupUpsert) {
+		s.UpdateL1Enabled()
+	})
+}
+
+// SetL2Enabled sets the "l2_enabled" field.
+func (u *GroupUpsertBulk) SetL2Enabled(v bool) *GroupUpsertBulk {
+	return u.Update(func(s *GroupUpsert) {
+		s.SetL2Enabled(v)
+	})
+}
+
+// UpdateL2Enabled sets the "l2_enabled" field to the value that was provided on create.
+func (u *GroupUpsertBulk) UpdateL2Enabled() *GroupUpsertBulk {
+	return u.Update(func(s *GroupUpsert) {
+		s.UpdateL2Enabled()
+	})
+}
+
+// SetL3Enabled sets the "l3_enabled" field.
+func (u *GroupUpsertBulk) SetL3Enabled(v bool) *GroupUpsertBulk {
+	return u.Update(func(s *GroupUpsert) {
+		s.SetL3Enabled(v)
+	})
+}
+
+// UpdateL3Enabled sets the "l3_enabled" field to the value that was provided on create.
+func (u *GroupUpsertBulk) UpdateL3Enabled() *GroupUpsertBulk {
+	return u.Update(func(s *GroupUpsert) {
+		s.UpdateL3Enabled()
 	})
 }
 

@@ -426,6 +426,12 @@ export interface AdminGroup extends Group {
 
   // 分组排序
   sort_order: number
+
+  // 安全等级配置
+  security_level?: string
+  l1_enabled?: boolean
+  l2_enabled?: boolean
+  l3_enabled?: boolean
 }
 
 export interface ApiKey {
@@ -434,6 +440,7 @@ export interface ApiKey {
   key: string
   name: string
   group_id: number | null
+  account_id: number | null // Bound upstream account ID
   status: 'active' | 'inactive' | 'quota_exhausted' | 'expired'
   ip_whitelist: string[]
   ip_blacklist: string[]
@@ -444,6 +451,7 @@ export interface ApiKey {
   created_at: string
   updated_at: string
   group?: Group
+  account?: Account // Bound upstream account
   rate_limit_5h: number
   rate_limit_1d: number
   rate_limit_7d: number
@@ -461,6 +469,7 @@ export interface ApiKey {
 export interface CreateApiKeyRequest {
   name: string
   group_id?: number | null
+  account_id?: number | null // Bound upstream account ID
   custom_key?: string // Optional custom API Key
   ip_whitelist?: string[]
   ip_blacklist?: string[]
@@ -474,6 +483,7 @@ export interface CreateApiKeyRequest {
 export interface UpdateApiKeyRequest {
   name?: string
   group_id?: number | null
+  account_id?: number | null // Bound upstream account ID
   status?: 'active' | 'inactive'
   ip_whitelist?: string[]
   ip_blacklist?: string[]

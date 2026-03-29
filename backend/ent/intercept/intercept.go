@@ -13,6 +13,8 @@ import (
 	"github.com/Wei-Shaw/sub2api/ent/announcement"
 	"github.com/Wei-Shaw/sub2api/ent/announcementread"
 	"github.com/Wei-Shaw/sub2api/ent/apikey"
+	"github.com/Wei-Shaw/sub2api/ent/auditlog"
+	"github.com/Wei-Shaw/sub2api/ent/dlprule"
 	"github.com/Wei-Shaw/sub2api/ent/errorpassthroughrule"
 	"github.com/Wei-Shaw/sub2api/ent/group"
 	"github.com/Wei-Shaw/sub2api/ent/idempotencyrecord"
@@ -21,6 +23,7 @@ import (
 	"github.com/Wei-Shaw/sub2api/ent/promocodeusage"
 	"github.com/Wei-Shaw/sub2api/ent/proxy"
 	"github.com/Wei-Shaw/sub2api/ent/redeemcode"
+	"github.com/Wei-Shaw/sub2api/ent/securityevent"
 	"github.com/Wei-Shaw/sub2api/ent/securitysecret"
 	"github.com/Wei-Shaw/sub2api/ent/setting"
 	"github.com/Wei-Shaw/sub2api/ent/tlsfingerprintprofile"
@@ -224,6 +227,60 @@ func (f TraverseAnnouncementRead) Traverse(ctx context.Context, q ent.Query) err
 	return fmt.Errorf("unexpected query type %T. expect *ent.AnnouncementReadQuery", q)
 }
 
+// The AuditLogFunc type is an adapter to allow the use of ordinary function as a Querier.
+type AuditLogFunc func(context.Context, *ent.AuditLogQuery) (ent.Value, error)
+
+// Query calls f(ctx, q).
+func (f AuditLogFunc) Query(ctx context.Context, q ent.Query) (ent.Value, error) {
+	if q, ok := q.(*ent.AuditLogQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *ent.AuditLogQuery", q)
+}
+
+// The TraverseAuditLog type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseAuditLog func(context.Context, *ent.AuditLogQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseAuditLog) Intercept(next ent.Querier) ent.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseAuditLog) Traverse(ctx context.Context, q ent.Query) error {
+	if q, ok := q.(*ent.AuditLogQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *ent.AuditLogQuery", q)
+}
+
+// The DLPRuleFunc type is an adapter to allow the use of ordinary function as a Querier.
+type DLPRuleFunc func(context.Context, *ent.DLPRuleQuery) (ent.Value, error)
+
+// Query calls f(ctx, q).
+func (f DLPRuleFunc) Query(ctx context.Context, q ent.Query) (ent.Value, error) {
+	if q, ok := q.(*ent.DLPRuleQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *ent.DLPRuleQuery", q)
+}
+
+// The TraverseDLPRule type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseDLPRule func(context.Context, *ent.DLPRuleQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseDLPRule) Intercept(next ent.Querier) ent.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseDLPRule) Traverse(ctx context.Context, q ent.Query) error {
+	if q, ok := q.(*ent.DLPRuleQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *ent.DLPRuleQuery", q)
+}
+
 // The ErrorPassthroughRuleFunc type is an adapter to allow the use of ordinary function as a Querier.
 type ErrorPassthroughRuleFunc func(context.Context, *ent.ErrorPassthroughRuleQuery) (ent.Value, error)
 
@@ -411,6 +468,33 @@ func (f TraverseRedeemCode) Traverse(ctx context.Context, q ent.Query) error {
 		return f(ctx, q)
 	}
 	return fmt.Errorf("unexpected query type %T. expect *ent.RedeemCodeQuery", q)
+}
+
+// The SecurityEventFunc type is an adapter to allow the use of ordinary function as a Querier.
+type SecurityEventFunc func(context.Context, *ent.SecurityEventQuery) (ent.Value, error)
+
+// Query calls f(ctx, q).
+func (f SecurityEventFunc) Query(ctx context.Context, q ent.Query) (ent.Value, error) {
+	if q, ok := q.(*ent.SecurityEventQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *ent.SecurityEventQuery", q)
+}
+
+// The TraverseSecurityEvent type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseSecurityEvent func(context.Context, *ent.SecurityEventQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseSecurityEvent) Intercept(next ent.Querier) ent.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseSecurityEvent) Traverse(ctx context.Context, q ent.Query) error {
+	if q, ok := q.(*ent.SecurityEventQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *ent.SecurityEventQuery", q)
 }
 
 // The SecuritySecretFunc type is an adapter to allow the use of ordinary function as a Querier.
@@ -696,6 +780,10 @@ func NewQuery(q ent.Query) (Query, error) {
 		return &query[*ent.AnnouncementQuery, predicate.Announcement, announcement.OrderOption]{typ: ent.TypeAnnouncement, tq: q}, nil
 	case *ent.AnnouncementReadQuery:
 		return &query[*ent.AnnouncementReadQuery, predicate.AnnouncementRead, announcementread.OrderOption]{typ: ent.TypeAnnouncementRead, tq: q}, nil
+	case *ent.AuditLogQuery:
+		return &query[*ent.AuditLogQuery, predicate.AuditLog, auditlog.OrderOption]{typ: ent.TypeAuditLog, tq: q}, nil
+	case *ent.DLPRuleQuery:
+		return &query[*ent.DLPRuleQuery, predicate.DLPRule, dlprule.OrderOption]{typ: ent.TypeDLPRule, tq: q}, nil
 	case *ent.ErrorPassthroughRuleQuery:
 		return &query[*ent.ErrorPassthroughRuleQuery, predicate.ErrorPassthroughRule, errorpassthroughrule.OrderOption]{typ: ent.TypeErrorPassthroughRule, tq: q}, nil
 	case *ent.GroupQuery:
@@ -710,6 +798,8 @@ func NewQuery(q ent.Query) (Query, error) {
 		return &query[*ent.ProxyQuery, predicate.Proxy, proxy.OrderOption]{typ: ent.TypeProxy, tq: q}, nil
 	case *ent.RedeemCodeQuery:
 		return &query[*ent.RedeemCodeQuery, predicate.RedeemCode, redeemcode.OrderOption]{typ: ent.TypeRedeemCode, tq: q}, nil
+	case *ent.SecurityEventQuery:
+		return &query[*ent.SecurityEventQuery, predicate.SecurityEvent, securityevent.OrderOption]{typ: ent.TypeSecurityEvent, tq: q}, nil
 	case *ent.SecuritySecretQuery:
 		return &query[*ent.SecuritySecretQuery, predicate.SecuritySecret, securitysecret.OrderOption]{typ: ent.TypeSecuritySecret, tq: q}, nil
 	case *ent.SettingQuery:
